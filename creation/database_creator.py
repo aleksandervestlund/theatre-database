@@ -48,7 +48,8 @@ class DatabaseCreator:
     def print_all_tables(self, mute_tables: list[str] | None = None) -> None:
         """Printer alle tabellene i databasen.
 
-        :param list[str] mute_tables: Tabeller som ikke skal printes
+        :param list[str] | None mute_tables: Tabeller som ikke skal printes,
+        defaulter til None
         """
         if mute_tables is None:
             for table in TABLES:
@@ -69,8 +70,12 @@ class DatabaseCreator:
         rows: list[tuple[Any, ...]],
         attributes: list[str] | None = None,
     ) -> None:
-        """Legger til `rows` i `table`. Alle rader må være like lange og
-        bruke samme `attributtes`.
+        """Fyller en tabell med rader.
+
+        :param str table: Tabellen som skal fylles
+        :param list[tuple[Any, ...]] rows: Radene som skal legges til
+        :param list[str] | None attributes: Attributtene som skal settes
+        inn, defaulter til None
         """
         if not rows:
             return
@@ -144,7 +149,8 @@ class DatabaseCreator:
 
     def close(self, commit: bool = False) -> None:
         """Lukker tilkoblingen til databasen. Må kjøres til slutt.
-        Commiter ikke by default.
+
+        :param bool commit: Om endringene skal lagres, defaulter til False
         """
         self.con.execute("PRAGMA analysis_limit=1000")
         self.con.execute("PRAGMA optimize")
