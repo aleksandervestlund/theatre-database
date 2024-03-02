@@ -7,7 +7,6 @@ from typing import Any
 from creation.rows import (
     AKTER,
     ANSATTE,
-    ATTRIBUTES,
     DATOER,
     DELTAR_I,
     FORESTILLINGER,
@@ -24,39 +23,7 @@ from creation.rows import (
     TABLES,
     TEATERSTYKKER,
 )
-
-
-def validate_table_name(table_name: str) -> None:
-    """Validerer tabellnavnet. Case-sensitiv."""
-    if table_name not in TABLES:
-        raise ValueError(f"Ugyldig tabellnavn: {table_name}.")
-
-
-def validate_attribute_names(attribute_names: list[str]) -> None:
-    """Validerer attributtnavn. Case-sensitiv."""
-    for attribute in attribute_names:
-        if attribute not in ATTRIBUTES:
-            raise ValueError(f"Ugyldig attributtnavn: {attribute}.")
-
-
-def query_user(db: DatabaseCreator, query: bool = True) -> None:
-    """Spør brukeren hvor utfylt database de ønsker. Alle svar annet enn
-    1 og 2 vil gi en komplett database.
-
-    :param DatabaseCreator db: Databasen som skal endres
-    :param bool query: Om brukeren skal bli spurt, defaulter til True
-    """
-    print("Mulighet 1: Lag en tom database.")
-    print("Mulighet 2: Lag en database med tomme tabeller.")
-    print("Mulighet 3: Lag en database fylt med rader.")
-    option = input("Hvilken mulighet ønsker du? [1/2/3]\n") if query else "3"
-
-    if option == "1":
-        return
-    db.create_tables()
-    if option == "2":
-        return
-    db.fill_tables()
+from creation.validators import validate_attribute_names, validate_table_name
 
 
 class DatabaseCreator:
