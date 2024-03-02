@@ -85,7 +85,6 @@ ROLLER = [
     ("Jatgeir Skald",),
     ("Dagfinn Bonde",),
     ("Peter",),
-    # ? ("Guttorm Ingessønn",),
     # Størst av alt er kjærligheten
     ("Sunniva Du Mond Nordal",),
     ("Jo Saberniak",),
@@ -226,4 +225,5 @@ FORESTILLINGER = [
     ("Størst av alt er kjærligheten", "Gamle Scene", 2, 14),
 ]
 
-KUNDEPROFILER = [("004700000000", "Høgskoleringen 1", "Admin")]
+# Admin-bruker
+KUNDEPROFILER = [("004700000000", "Høgskoleringen 1", "Holters")]
