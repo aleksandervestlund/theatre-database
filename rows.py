@@ -228,7 +228,7 @@ TABLES = [
     "Billett",
 ]
 
-ATTRIBUTES = [
+ATTRIBUTES = {
     "Adresse",
     "AktNummer",
     "Ansattstatus",
@@ -257,4 +257,4 @@ ATTRIBUTES = [
     "SkuespillerID",
     "StolNummer",
     "TeaterstykkeNavn",
-]
+}

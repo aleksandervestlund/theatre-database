@@ -5,17 +5,6 @@ CREATE TABLE IF NOT EXISTS Teaterstykke (
     PRIMARY KEY (Navn)
 );
 
-CREATE TABLE IF NOT EXISTS Gruppe (
-    TeaterstykkeNavn TEXT NOT NULL,
-    Navn TEXT NOT NULL,
-    Pris INTEGER NOT NULL,
-    PRIMARY KEY (TeaterstykkeNavn, Navn),
-    FOREIGN KEY (TeaterstykkeNavn)
-        REFERENCES Teaterstykke (Navn)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION
-);
-
 CREATE TABLE IF NOT EXISTS Oppgave (
     TeaterstykkeNavn TEXT NOT NULL,
     Navn TEXT NOT NULL,
@@ -161,6 +150,17 @@ CREATE TABLE IF NOT EXISTS Billettkjøp (
             ON UPDATE NO ACTION,
     FOREIGN KEY (TeaterstykkeNavn, SalNavn, MånedVises, DagVises)
         REFERENCES Forestilling (TeaterstykkeNavn, SalNavn, MånedVises, DagVises)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION
+);
+
+CREATE TABLE IF NOT EXISTS Gruppe (
+    TeaterstykkeNavn TEXT NOT NULL,
+    Navn TEXT NOT NULL,
+    Pris INTEGER NOT NULL,
+    PRIMARY KEY (TeaterstykkeNavn, Navn),
+    FOREIGN KEY (TeaterstykkeNavn)
+        REFERENCES Teaterstykke (Navn)
             ON DELETE CASCADE
             ON UPDATE NO ACTION
 );

@@ -47,10 +47,40 @@ class DatabaseCreator:
         self.con = sqlite3.connect(self.DB_FILE)
         self.con.execute("PRAGMA foreign_keys = ON")
         self.cursor = self.con.cursor()
+
+    def print_table(self, table: str) -> None:
+        validate_table_name(table)
+        dashes = "-" * ((92 - len(table)) // 2)
+        print(f"{dashes}{table}{dashes}")
+        for row in self.cursor.execute(f"SELECT * FROM {table}"):
+            print(row)
+
+    def print_all_tables(self) -> None:
+        for table in TABLES:
+            self.print_table(table)
+
+    def create_tables(self) -> None:
         with open(self.SQL_FILE, encoding="utf-8") as file:
             self.con.executescript(file.read())
 
-    def create_seat_reservations(self) -> None:
+    def insert_rows(
+        self,
+        table: str,
+        rows: list[tuple[Any, ...]],
+        attributes: list[str] | None = None,
+    ) -> None:
+        if not rows:
+            return
+        validate_table_name(table)
+        command = f"INSERT INTO {table} "
+        if attributes is not None:
+            validate_attribute_names(attributes)
+            command += f"({', '.join(attributes)}) "
+        command += f"VALUES ({', '.join(('?') * len(rows[0]))})"
+        for row in rows:
+            self.cursor.execute(command, row)
+
+    def book_reserved_seats(self) -> None:
         for i, info in enumerate(
             # fmt: off
             (
@@ -83,32 +113,7 @@ class DatabaseCreator:
                     continue
                 self.insert_rows("Billett", [(i, *chairs[j], play, "Ordinær")])
 
-    def print_table(self, table: str) -> None:
-        validate_table_name(table)
-        dashes = "-" * ((92 - len(table)) // 2)
-        print(f"{dashes}{table}{dashes}")
-        for row in self.cursor.execute(f"SELECT * FROM {table}"):
-            print(row)
-
-    def print_all_tables(self) -> None:
-        for table in TABLES:
-            self.print_table(table)
-
-    def insert_rows(
-        self, table: str, rows: list[Any], attributes: list[str] | None = None
-    ) -> None:
-        if not rows:
-            return
-        validate_table_name(table)
-        command = f"INSERT INTO {table} "
-        if attributes is not None:
-            validate_attribute_names(attributes)
-            command += f"({', '.join(attributes)}) "
-        command += f"VALUES ({', '.join(('?') * len(rows[0]))})"
-        for row in rows:
-            self.cursor.execute(command, row)
-
-    def populate_database(self) -> None:
+    def fill_tables(self) -> None:
         # fmt: off
         self.insert_rows("Teaterstykke", TEATERSTYKKER)
         self.insert_rows("Gruppe", GRUPPER)
@@ -125,7 +130,7 @@ class DatabaseCreator:
         self.insert_rows("Forestilling", FORESTILLINGER)
         self.insert_rows("Kundeprofil", KUNDEPROFILER)
         # fmt: off
-        self.create_seat_reservations()
+        self.book_reserved_seats()
 
     def close(self) -> None:
         self.con.execute("PRAGMA analysis_limit=1000")
@@ -136,7 +141,8 @@ class DatabaseCreator:
 
 def main() -> None:
     db = DatabaseCreator()
-    db.populate_database()
+    db.create_tables()
+    db.fill_tables()
     db.print_all_tables()
     db.close()
 
