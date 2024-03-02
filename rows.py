@@ -1,22 +1,3 @@
-TABLES = [
-    "Teaterstykke",
-    "Gruppe",
-    "Oppgave",
-    "Ansatt",
-    "Akt",
-    "Rolle",
-    "DeltarI",
-    "Skuespiller",
-    "SpillerRolle",
-    "Dato",
-    "Sal",
-    "Stol",
-    "Forestilling",
-    "Kundeprofil",
-    "Billettkjøp",
-    "Billett",
-]
-
 TEATERSTYKKER = [
     ("Kongsemnene", "Henrik Ibsen", "19.00"),
     ("Størst av alt er kjærligheten", "Jonas Corell Petersen", "18.30"),
@@ -225,4 +206,55 @@ FORESTILLINGER = [
     ("Størst av alt er kjærligheten", "Gamle Scene", 2, 14),
 ]
 
-KUNDEPROFILER = [("004700000000", "Høgskoleringen 1", "Admin")]
+# Admin-bruker
+KUNDEPROFILER = [("004700000000", "Høgskoleringen 1", "Holters")]
+
+TABLES = [
+    "Teaterstykke",
+    "Gruppe",
+    "Oppgave",
+    "Ansatt",
+    "Akt",
+    "Rolle",
+    "DeltarI",
+    "Skuespiller",
+    "SpillerRolle",
+    "Dato",
+    "Sal",
+    "Stol",
+    "Forestilling",
+    "Kundeprofil",
+    "Billettkjøp",
+    "Billett",
+]
+
+ATTRIBUTES = [
+    "Adresse",
+    "AktNummer",
+    "Ansattstatus",
+    "BillettkjøpID",
+    "Dag",
+    "DagKjøpt",
+    "DagVises",
+    "EPostadresse",
+    "Forfatter",
+    "GruppeNavn",
+    "ID",
+    "Klokkeslett",
+    "KundeprofilMobilnummer",
+    "Mobilnummer",
+    "Måned",
+    "MånedKjøpt",
+    "MånedVises",
+    "Navn",
+    "Nummer",
+    "Område",
+    "OppgaveNavn",
+    "Pris",
+    "RadNummer",
+    "RolleNavn",
+    "SalNavn",
+    "SkuespillerID",
+    "StolNummer",
+    "TeaterstykkeNavn",
+]
