@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import os
 import sqlite3
 from typing import Any
 
-from rows import (
+from creation.rows import (
     AKTER,
     ANSATTE,
     ATTRIBUTES,
@@ -37,9 +39,29 @@ def validate_attribute_names(attribute_names: list[str]) -> None:
             raise ValueError(f"Ugyldig attributtnavn: {attribute}.")
 
 
+def query_user(db: DatabaseCreator, query: bool = True) -> None:
+    """Spør brukeren hvor utfylt database de ønsker. Alle svar annet enn
+    1 og 2 vil gi en komplett database.
+
+    :param DatabaseCreator db: Databasen som skal endres
+    :param bool query: Om brukeren skal bli spurt, defaulter til True
+    """
+    print("Mulighet 1: Lag en tom database.")
+    print("Mulighet 2: Lag en database med tomme tabeller.")
+    print("Mulighet 3: Lag en database fylt med rader.")
+    option = input("Hvilken mulighet ønsker du? [1/2/3]\n") if query else "3"
+
+    if option == "1":
+        return
+    db.create_tables()
+    if option == "2":
+        return
+    db.fill_tables()
+
+
 class DatabaseCreator:
     DB_FILE = "teater.db"
-    SQL_FILE = "create.sql"
+    SQL_FILE = "creation/create.sql"
 
     def __init__(self) -> None:
         """Lager en tilkobling til en tom database."""
@@ -57,7 +79,10 @@ class DatabaseCreator:
             print(row)
 
     def print_all_tables(self, mute_tables: list[str] | None = None) -> None:
-        """Printer alle tabellene i databasen. Kan mute tabeller."""
+        """Printer alle tabellene i databasen.
+
+        :param list[str] mute_tables: Tabeller som ikke skal printes
+        """
         if mute_tables is None:
             for table in TABLES:
                 self.print_table(table)
@@ -93,7 +118,8 @@ class DatabaseCreator:
 
     def book_reserved_seats(self) -> None:
         """Leser fra filene i `reservations` og legger til et
-        billettkjøp per fil og alle billettene i den respektive filen.
+        billettkjøp per fil og lager en billett til alle reserverte
+        seter i den respektive filen.
         """
         for i, info in enumerate(
             # fmt: off
@@ -128,7 +154,7 @@ class DatabaseCreator:
                 self.insert_rows("Billett", [(i, *chairs[j], play, "Ordinær")])
 
     def fill_tables(self) -> None:
-        """Fyller tabellene med data fra `rows.py`. Avhenger av at
+        """Fyller tabellene med data fra `rows.py`. Avhengig av at
         `create_tables` har blitt kjørt først.
         """
         # fmt: off
@@ -158,36 +184,3 @@ class DatabaseCreator:
         if commit:
             self.con.commit()
         self.con.close()
-
-
-def query_user(db: DatabaseCreator, query: bool = True) -> None:
-    """Spør brukeren hvor utfylt database de ønsker. Alle svar annet enn
-    1 og 2 vil gi en komplett database.
-
-    :param bool query: Om brukeren skal bli spurt, defaulter til True
-    """
-    print("Mulighet 1: Lag en tom database.")
-    print("Mulighet 2: Lag en database med tomme tabeller.")
-    print("Mulighet 3: Lag en database fylt med rader.")
-    option = input("Hvilken mulighet ønsker du? [1/2/3]\n") if query else "3"
-
-    if option == "1":
-        return
-    db.create_tables()
-    if option == "2":
-        return
-    db.fill_tables()
-
-
-def main() -> None:
-    db = DatabaseCreator()
-    query_user(db, True)
-    try:
-        db.print_all_tables(["Dato", "Stol", "Billett"])
-    except sqlite3.OperationalError:
-        print("Ingen tabeller.")
-    db.close()
-
-
-if __name__ == "__main__":
-    main()
