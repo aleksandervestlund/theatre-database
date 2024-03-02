@@ -21,6 +21,7 @@ from rows import (
     TEATERSTYKKER,
 )
 
+
 DB_FILE = "teater.db"
 SQL_FILE = "create.sql"
 
@@ -57,19 +58,19 @@ def insert_rows(
     command = f"INSERT INTO {table_name} "
     if attributes is not None:
         command += f"({', '.join(attributes)}) "
-    command += f"VALUES ({', '.join(['?'] * len(rows[0]))})"
+    command += f"VALUES ({', '.join(('?') * len(rows[0]))})"
     for row in rows:
         cursor.execute(command, row)
 
 
 def create_seat_reservations() -> None:
     for i, info in enumerate(
+        # fmt: off
         (
             ("hovedscenen", "Kongsemnene", HOVEDSCENE_STOLER),
-            # fmt: off
             ("gamle-scene", "Størst av alt er kjærligheten", GAMLE_SCENE_STOLER),
-            # fmt: on
         ),
+        # fmt: on
         start=1,
     ):
         filename, play, chairs = info
@@ -95,14 +96,11 @@ def create_seat_reservations() -> None:
 
 
 def populate_database() -> None:
+    # fmt: off
     insert_rows("Teaterstykke", TEATERSTYKKER)
     insert_rows("Gruppe", GRUPPER)
     insert_rows("Oppgave", OPPGAVER)
-    insert_rows(
-        "Ansatt",
-        ANSATTE,
-        ["Ansattstatus", "Navn", "TeaterstykkeNavn", "OppgaveNavn"],
-    )
+    insert_rows("Ansatt", ANSATTE, ["Ansattstatus", "Navn", "TeaterstykkeNavn", "OppgaveNavn"])
     insert_rows("Akt", AKTER, ["TeaterstykkeNavn", "Nummer"])
     insert_rows("Rolle", ROLLER)
     insert_rows("DeltarI", DELTAR_I)
@@ -113,6 +111,7 @@ def populate_database() -> None:
     insert_rows("Stol", STOLER)
     insert_rows("Forestilling", FORESTILLINGER)
     insert_rows("Kundeprofil", KUNDEPROFILER)
+    # fmt: on
     create_seat_reservations()
 
 

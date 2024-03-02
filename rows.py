@@ -85,7 +85,6 @@ ROLLER = [
     ("Jatgeir Skald",),
     ("Dagfinn Bonde",),
     ("Peter",),
-    # ? ("Guttorm Ingessønn",),
     # Størst av alt er kjærligheten
     ("Sunniva Du Mond Nordal",),
     ("Jo Saberniak",),
