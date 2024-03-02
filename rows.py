@@ -258,8 +258,3 @@ FORESTILLINGER = [
 ]
 
 KUNDEPROFILER = [("004700000000", "Høgskoleringen 1", "Admin")]
-
-# MånedKjøpt, DagKjøpt, KundeprofilMobilnummer, TeaterstykkeNavn, SalNavn, MånedVises, DagVises
-BILLETTKJOEP = []
-
-BILLETTER = []

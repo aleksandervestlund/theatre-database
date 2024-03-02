@@ -3,8 +3,6 @@ import sqlite3
 from rows import (
     AKTER,
     ANSATTE,
-    BILLETTER,
-    BILLETTKJOEP,
     DATOER,
     DELTAR_I,
     FORESTILLINGER,
@@ -30,8 +28,8 @@ if os.path.exists(DB_FILE):
 con = sqlite3.connect(DB_FILE)
 con.execute("PRAGMA foreign_keys = ON")
 cursor = con.cursor()
-with open(SQL_FILE, encoding="utf-8") as file:
-    con.executescript(file.read())
+with open(SQL_FILE, encoding="utf-8") as sql:
+    con.executescript(sql.read())
 
 
 def _validate_table(table_name: str) -> None:
@@ -82,14 +80,6 @@ def populate_database() -> None:
     insert_rows("Stol", STOLER)
     insert_rows("Forestilling", FORESTILLINGER)
     insert_rows("Kundeprofil", KUNDEPROFILER)
-    # fmt: off
-    insert_rows(
-        "Billettkjøp",
-        BILLETTKJOEP,
-        ["MånedKjøpt", "DagKjøpt", "KundeprofilMobilnummer", "TeaterstykkeNavn", "SalNavn", "MånedVises", "DagVises"],
-    )
-    # fmt: on
-    insert_rows("Billett", BILLETTER)
 
 
 def create_seat_reservations() -> None:
