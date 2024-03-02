@@ -96,61 +96,30 @@ ROLLER = [
     ("Åsmund Flaten",),
 ]
 
-DELTAR_I = [
-    ("Haakon Haakonssønn", "Kongsemnene", 1),
-    ("Haakon Haakonssønn", "Kongsemnene", 2),
-    ("Haakon Haakonssønn", "Kongsemnene", 3),
-    ("Haakon Haakonssønn", "Kongsemnene", 4),
-    ("Haakon Haakonssønn", "Kongsemnene", 5),
-    ("Inga fra Vartejg", "Kongsemnene", 1),
-    ("Inga fra Vartejg", "Kongsemnene", 3),
-    ("Skule jarl", "Kongsemnene", 1),
-    ("Skule jarl", "Kongsemnene", 2),
-    ("Skule jarl", "Kongsemnene", 3),
-    ("Skule jarl", "Kongsemnene", 4),
-    ("Skule jarl", "Kongsemnene", 5),
-    ("Fru Ragnhild", "Kongsemnene", 1),
-    ("Fru Ragnhild", "Kongsemnene", 5),
-    ("Margrete", "Kongsemnene", 1),
-    ("Margrete", "Kongsemnene", 2),
-    ("Margrete", "Kongsemnene", 3),
-    ("Margrete", "Kongsemnene", 4),
-    ("Margrete", "Kongsemnene", 5),
-    ("Sigrid", "Kongsemnene", 1),
-    ("Sigrid", "Kongsemnene", 2),
-    ("Sigrid", "Kongsemnene", 5),
-    ("Ingebjørg", "Kongsemnene", 4),
-    ("Biskop Nikolas", "Kongsemnene", 1),
-    ("Biskop Nikolas", "Kongsemnene", 2),
-    ("Biskop Nikolas", "Kongsemnene", 3),
-    ("Gregorius Jonssønn", "Kongsemnene", 1),
-    ("Gregorius Jonssønn", "Kongsemnene", 2),
-    ("Gregorius Jonssønn", "Kongsemnene", 3),
-    ("Gregorius Jonssønn", "Kongsemnene", 4),
-    ("Gregorius Jonssønn", "Kongsemnene", 5),
-    ("Paal Flida", "Kongsemnene", 1),
-    ("Paal Flida", "Kongsemnene", 2),
-    ("Paal Flida", "Kongsemnene", 3),
-    ("Paal Flida", "Kongsemnene", 4),
-    ("Paal Flida", "Kongsemnene", 5),
-    ("Baard Bratte", "Kongsemnene", 4),
-    ("Baard Bratte", "Kongsemnene", 5),
-    ("Jatgeir Skald", "Kongsemnene", 1),
-    ("Dagfinn Bonde", "Kongsemnene", 2),
-    ("Dagfinn Bonde", "Kongsemnene", 3),
-    ("Dagfinn Bonde", "Kongsemnene", 4),
-    ("Dagfinn Bonde", "Kongsemnene", 5),
-    ("Peter", "Kongsemnene", 3),
-    ("Peter", "Kongsemnene", 4),
-    ("Peter", "Kongsemnene", 5),
-    ("Sunniva Du Mond Nordal", "Størst av alt er kjærligheten", 1),
-    ("Jo Saberniak", "Størst av alt er kjærligheten", 1),
-    ("Marte M. Steinholt", "Størst av alt er kjærligheten", 1),
-    ("Tor Ivar Hagen", "Størst av alt er kjærligheten", 1),
-    ("Trond-Ove Skrødal", "Størst av alt er kjærligheten", 1),
-    ("Natalie Grøndahl Tangen", "Størst av alt er kjærligheten", 1),
-    ("Åsmund Flaten", "Størst av alt er kjærligheten", 1),
-]
+# fmt: off
+DELTAR_I = []
+DELTAR_I.extend([("Haakon Haakonssønn", "Kongsemnene", i) for i in range(1, 6)])
+DELTAR_I.extend([("Inga fra Vartejg", "Kongsemnene", i) for i in (1, 3)])
+DELTAR_I.extend([("Skule jarl", "Kongsemnene", i) for i in range(1, 6)])
+DELTAR_I.extend([("Fru Ragnhild", "Kongsemnene", i) for i in (1, 5)])
+DELTAR_I.extend([("Margrete", "Kongsemnene", i) for i in range(1, 6)])
+DELTAR_I.extend([("Sigrid", "Kongsemnene", i) for i in (1, 2, 5)])
+DELTAR_I.append(("Ingebjørg", "Kongsemnene", 4))
+DELTAR_I.extend([("Biskop Nikolas", "Kongsemnene", i) for i in range(1, 4)])
+DELTAR_I.extend([("Gregorius Jonssønn", "Kongsemnene", i) for i in range(1, 6)])
+DELTAR_I.extend([("Paal Flida", "Kongsemnene", i) for i in range(1, 6)])
+DELTAR_I.extend([("Baard Bratte", "Kongsemnene", i) for i in (4, 5)])
+DELTAR_I.append(("Jatgeir Skald", "Kongsemnene", 1))
+DELTAR_I.extend([("Dagfinn Bonde", "Kongsemnene", i) for i in range(2, 6)])
+DELTAR_I.extend([("Peter", "Kongsemnene", i) for i in range(3, 6)])
+DELTAR_I.append(("Sunniva Du Mond Nordal", "Størst av alt er kjærligheten", 1))
+DELTAR_I.append(("Jo Saberniak", "Størst av alt er kjærligheten", 1))
+DELTAR_I.append(("Marte M. Steinholt", "Størst av alt er kjærligheten", 1))
+DELTAR_I.append(("Tor Ivar Hagen", "Størst av alt er kjærligheten", 1))
+DELTAR_I.append(("Trond-Ove Skrødal", "Størst av alt er kjærligheten", 1))
+DELTAR_I.append(("Natalie Grøndahl Tangen", "Størst av alt er kjærligheten", 1))
+DELTAR_I.append(("Åsmund Flaten", "Størst av alt er kjærligheten", 1))
+# fmt: on
 
 # Navn
 SKUESPILLERE = [
@@ -218,9 +187,9 @@ SALER = [
 # fmt: off
 STOLER = []
 HOVEDSCENE_STOLER = []
-HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "Gulv") for plass in range(1, 467)])
-HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "Gulv") for plass in range(471, 495)])
-HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "Gulv") for plass in range(499, 505)])
+HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "") for plass in range(1, 467)])
+HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "") for plass in range(471, 495)])
+HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "") for plass in range(499, 505)])
 HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 505) // 10) + 1, "Galleri") for plass in range(505, 525)])
 STOLER.extend(HOVEDSCENE_STOLER)
 
