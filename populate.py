@@ -1,6 +1,7 @@
 import os
 import sqlite3
 from typing import Any
+
 from rows import (
     AKTER,
     ANSATTE,
@@ -60,6 +61,7 @@ class DatabaseCreator:
             self.print_table(table)
 
     def create_tables(self) -> None:
+        """Kjører `DB_FILE`."""
         with open(self.SQL_FILE, encoding="utf-8") as file:
             self.con.executescript(file.read())
 
@@ -69,6 +71,9 @@ class DatabaseCreator:
         rows: list[tuple[Any, ...]],
         attributes: list[str] | None = None,
     ) -> None:
+        """Legger til `rows` i `table`. Alle rader må være like lange og
+        bruke samme `attributtes`. Case-sensitiv.
+        """
         if not rows:
             return
         validate_table_name(table)
@@ -81,6 +86,9 @@ class DatabaseCreator:
             self.cursor.execute(command, row)
 
     def book_reserved_seats(self) -> None:
+        """Leser fra filene i `reservations` og legger til et
+        billettkjøp per fil og alle billettene i den respektive filen.
+        """
         for i, info in enumerate(
             # fmt: off
             (
@@ -114,6 +122,9 @@ class DatabaseCreator:
                 self.insert_rows("Billett", [(i, *chairs[j], play, "Ordinær")])
 
     def fill_tables(self) -> None:
+        """Fyller tabellene med data fra `rows.py`. Avhenger av at
+        `create_tables` har blitt kjørt først.
+        """
         # fmt: off
         self.insert_rows("Teaterstykke", TEATERSTYKKER)
         self.insert_rows("Gruppe", GRUPPER)
@@ -132,10 +143,14 @@ class DatabaseCreator:
         # fmt: off
         self.book_reserved_seats()
 
-    def close(self) -> None:
+    def close(self, commit: bool = False) -> None:
+        """Lukker tilkoblingen til databasen. Må kjøres til slutt.
+        Commiter ikke by default.
+        """
         self.con.execute("PRAGMA analysis_limit=1000")
         self.con.execute("PRAGMA optimize")
-        # self.con.commit()
+        if commit:
+            self.con.commit()
         self.con.close()
 
 
