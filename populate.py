@@ -42,7 +42,7 @@ class DatabaseCreator:
     SQL_FILE = "create.sql"
 
     def __init__(self) -> None:
-        # Lag ny .db fil
+        """Lager en tilkobling til en tom database."""
         if os.path.exists(self.DB_FILE):
             os.remove(self.DB_FILE)
         self.con = sqlite3.connect(self.DB_FILE)
@@ -51,17 +51,23 @@ class DatabaseCreator:
 
     def print_table(self, table: str) -> None:
         validate_table_name(table)
-        dashes = "-" * ((92 - len(table)) // 2)
+        dashes = "-" * (46 - len(table) // 2)
         print(f"{dashes}{table}{dashes}")
         for row in self.cursor.execute(f"SELECT * FROM {table}"):
             print(row)
 
-    def print_all_tables(self) -> None:
+    def print_all_tables(self, mute_tables: list[str] | None = None) -> None:
+        """Printer alle tabellene i databasen. Kan mute tabeller."""
+        if mute_tables is None:
+            for table in TABLES:
+                self.print_table(table)
+            return
         for table in TABLES:
-            self.print_table(table)
+            if table not in mute_tables:
+                self.print_table(table)
 
     def create_tables(self) -> None:
-        """Kjører `DB_FILE`."""
+        """Kjører `SQL_FILE`."""
         with open(self.SQL_FILE, encoding="utf-8") as file:
             self.con.executescript(file.read())
 
@@ -72,7 +78,7 @@ class DatabaseCreator:
         attributes: list[str] | None = None,
     ) -> None:
         """Legger til `rows` i `table`. Alle rader må være like lange og
-        bruke samme `attributtes`. Case-sensitiv.
+        bruke samme `attributtes`.
         """
         if not rows:
             return
@@ -158,7 +164,7 @@ def main() -> None:
     db = DatabaseCreator()
     db.create_tables()
     db.fill_tables()
-    db.print_all_tables()
+    db.print_all_tables(["Dato", "Stol", "Billett"])
     db.close()
 
 
