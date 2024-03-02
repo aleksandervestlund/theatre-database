@@ -63,13 +63,11 @@ def populate_database() -> None:
     insert_rows("Teaterstykke", TEATERSTYKKER)
     insert_rows("Gruppe", GRUPPER)
     insert_rows("Oppgave", OPPGAVER)
-    # fmt: off
     insert_rows(
         "Ansatt",
         ANSATTE,
         ["Ansattstatus", "Navn", "TeaterstykkeNavn", "OppgaveNavn"],
     )
-    # fmt: on
     insert_rows("Akt", AKTER, ["TeaterstykkeNavn", "Nummer"])
     insert_rows("Rolle", ROLLER)
     insert_rows("DeltarI", DELTAR_I)
@@ -83,7 +81,6 @@ def populate_database() -> None:
 
 
 def create_seat_reservations() -> None:
-    # filename, play
     for i, info in enumerate(
         (
             ("hovedscenen", "Kongsemnene"),
