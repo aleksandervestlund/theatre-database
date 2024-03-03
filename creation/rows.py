@@ -3,16 +3,6 @@ TEATERSTYKKER = [
     ("Størst av alt er kjærligheten", "Jonas Corell Petersen", "18.30"),
 ]
 
-GRUPPER = [
-    ("Kongsemnene", "Ordinær", "450"),
-    ("Kongsemnene", "Honnør", "380"),
-    ("Kongsemnene", "Student", "280"),
-    ("Størst av alt er kjærligheten", "Ordinær", "350"),
-    ("Størst av alt er kjærligheten", "Honnør", "300"),
-    ("Størst av alt er kjærligheten", "Student", "220"),
-    ("Størst av alt er kjærligheten", "Barn", "220"),
-]
-
 OPPGAVER = [
     ("Kongsemnene", "Regi og musikkutvelgelse"),
     ("Kongsemnene", "Scenografi og kostymer"),
@@ -208,6 +198,16 @@ FORESTILLINGER = [
 
 # Admin-bruker
 KUNDEPROFILER = [("004700000000", "Høgskoleringen 1", "Holters")]
+
+GRUPPER = [
+    ("Kongsemnene", "Ordinær", "450"),
+    ("Kongsemnene", "Honnør", "380"),
+    ("Kongsemnene", "Student", "280"),
+    ("Størst av alt er kjærligheten", "Ordinær", "350"),
+    ("Størst av alt er kjærligheten", "Honnør", "300"),
+    ("Størst av alt er kjærligheten", "Student", "220"),
+    ("Størst av alt er kjærligheten", "Barn", "220"),
+]
 
 TABLES = [
     "Teaterstykke",

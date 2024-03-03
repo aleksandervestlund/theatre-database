@@ -1,4 +1,4 @@
-import sqlite3
+from sqlite3 import OperationalError
 
 from creation.database_creator import DatabaseCreator
 
@@ -33,9 +33,9 @@ def main() -> None:
     query_user(db, True)
     try:
         db.print_all_tables(["Dato", "Stol", "Billett"])
-    except sqlite3.OperationalError:
+    except OperationalError:
         print("Ingen tabeller.")
-    db.close()
+    db.close(False)  # Lagre bare tabeller til db1
 
 
 if __name__ == "__main__":
