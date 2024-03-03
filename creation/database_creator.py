@@ -69,7 +69,7 @@ class DatabaseCreator:
         attributes: list[str] | None = None,
     ) -> None:
         """Fyller en tabell med rader. Avhengig av at `create_tables`
-        har blitt kjørt først. Alle tupleer i `rows` må ha samme lengde
+        har blitt kjørt først. Alle tupler i `rows` må ha samme lengde
         og bruke samme `attributes`.
 
         :param str table: Navnet på tabellen
@@ -130,11 +130,13 @@ class DatabaseCreator:
         """Fyller tabellene med data fra `rows.py`. Avhengig av at
         `create_tables` har blitt kjørt først.
         """
-        # fmt: off
         self.insert_rows("Teaterstykke", TEATERSTYKKER)
-        self.insert_rows("Gruppe", GRUPPER)
         self.insert_rows("Oppgave", OPPGAVER)
-        self.insert_rows("Ansatt", ANSATTE, ["Ansattstatus", "Navn", "TeaterstykkeNavn", "OppgaveNavn"])
+        self.insert_rows(
+            "Ansatt",
+            ANSATTE,
+            ["Ansattstatus", "Navn", "TeaterstykkeNavn", "OppgaveNavn"],
+        )
         self.insert_rows("Akt", AKTER, ["TeaterstykkeNavn", "Nummer"])
         self.insert_rows("Rolle", ROLLER)
         self.insert_rows("DeltarI", DELTAR_I)
@@ -145,7 +147,7 @@ class DatabaseCreator:
         self.insert_rows("Stol", STOLER)
         self.insert_rows("Forestilling", FORESTILLINGER)
         self.insert_rows("Kundeprofil", KUNDEPROFILER)
-        # fmt: off
+        self.insert_rows("Gruppe", GRUPPER)
         self.book_reserved_seats()
 
     def close(self, commit: bool = True) -> None:
