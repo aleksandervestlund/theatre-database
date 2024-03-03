@@ -26,42 +26,40 @@ from creation.rows import (
 from creation.validators import validate_attribute_names, validate_table_name
 
 
-class DatabaseCreator:
-    DB_FILE = "teater.db"
-    SQL_FILE = "creation/create.sql"
+DB_FILE = "teater.db"
+SQL_FILE = "creation/create.sql"
 
+
+class DatabaseCreator:
     def __init__(self) -> None:
         """Lager en tilkobling til en tom database."""
-        if os.path.exists(self.DB_FILE):
-            os.remove(self.DB_FILE)
-        self.con = sqlite3.connect(self.DB_FILE)
+        if os.path.exists(DB_FILE):
+            os.remove(DB_FILE)
+        self.con = sqlite3.connect(DB_FILE)
         self.con.execute("PRAGMA foreign_keys = ON")
         self.cursor = self.con.cursor()
 
     def print_table(self, table: str) -> None:
         validate_table_name(table)
-        dashes = "-" * (46 - len(table) // 2)
-        print(f"{dashes}{table}{dashes}")
+        length = len(table)
+        dashes = "-" * ((78 - length) // 2)
+        print(f"{dashes} {table} {dashes}{'-' * (length % 2)}")
         for row in self.cursor.execute(f"SELECT * FROM {table}"):
             print(row)
 
     def print_all_tables(self, mute_tables: list[str] | None = None) -> None:
         """Printer alle tabellene i databasen.
 
-        :param list[str] | None mute_tables: Tabeller som ikke skal printes,
-        defaulter til None
+        :param list[str] | None mute_tables: Tabeller som ikke skal
+        printes, defaulter til None
         """
-        if mute_tables is None:
-            for table in TABLES:
-                self.print_table(table)
-            return
         for table in TABLES:
-            if table not in mute_tables:
+            if mute_tables is None or table not in mute_tables:
                 self.print_table(table)
 
     def create_tables(self) -> None:
         """Kjører `SQL_FILE`."""
-        with open(self.SQL_FILE, encoding="utf-8") as file:
+        with open(SQL_FILE, encoding="utf-8") as file:
             self.con.executescript(file.read())
 
     def insert_rows(
@@ -70,12 +68,14 @@ class DatabaseCreator:
         rows: list[tuple[Any, ...]],
         attributes: list[str] | None = None,
     ) -> None:
-        """Fyller en tabell med rader.
+        """Fyller en tabell med rader. Avhengig av at `create_tables`
+        har blitt kjørt først. Alle tupleer i `rows` må ha samme lengde
+        og bruke samme `attributes`.
 
-        :param str table: Tabellen som skal fylles
-        :param list[tuple[Any, ...]] rows: Radene som skal legges til
-        :param list[str] | None attributes: Attributtene som skal settes
-        inn, defaulter til None
+        :param str table: Navnet på tabellen
+        :param list[tuple[Any, ...]] rows: Rader som skal legges til
+        :param list[str] attributes: Attributtene som skal settes inn,
+        defaulter til None
         """
         if not rows:
             return
@@ -121,9 +121,10 @@ class DatabaseCreator:
                 [(i, 1, 1, KUNDEPROFILER[0][0], play, scene, month, day)],
             )
             for j, seat in enumerate(seats_string):
-                if seat != "1":
-                    continue
-                self.insert_rows("Billett", [(i, *chairs[j], play, "Ordinær")])
+                if seat == "1":
+                    self.insert_rows(
+                        "Billett", [(i, *chairs[j], play, "Ordinær")]
+                    )
 
     def fill_tables(self) -> None:
         """Fyller tabellene med data fra `rows.py`. Avhengig av at
@@ -147,10 +148,11 @@ class DatabaseCreator:
         # fmt: off
         self.book_reserved_seats()
 
-    def close(self, commit: bool = False) -> None:
+    def close(self, commit: bool = True) -> None:
         """Lukker tilkoblingen til databasen. Må kjøres til slutt.
 
-        :param bool commit: Om endringene skal lagres, defaulter til False
+        :param bool commit: Om endringene skal lagres, defaulter til
+        True
         """
         self.con.execute("PRAGMA analysis_limit=1000")
         self.con.execute("PRAGMA optimize")
