@@ -35,7 +35,7 @@ def main() -> None:
         db.print_all_tables(["Dato", "Stol", "Billett"])
     except OperationalError:
         print("Ingen tabeller.")
-    db.close(False)  # Lagre bare tabeller til db1
+    db.close(False)  # Lagrer ikke rader til db1
 
 
 if __name__ == "__main__":

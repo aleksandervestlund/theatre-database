@@ -89,20 +89,17 @@ class DatabaseCreator:
             self.cursor.execute(command, row)
 
     def book_reserved_seats(self) -> None:
-        """Leser fra filene i `reservations` og legger til et
-        billettkjøp per fil og lager en billett til alle reserverte
-        seter i den respektive filen.
+        """Leser filene i `reservations`. Lager et billettkjøp og
+        knytter alle reserverte seter i den respektive filen til dette.
         """
-        for i, info in enumerate(
-            # fmt: off
-            (
-                ("hovedscenen", "Kongsemnene", HOVEDSCENE_STOLER),
-                ("gamle-scene", "Størst av alt er kjærligheten", GAMLE_SCENE_STOLER),
-            ),
-            # fmt: on
-            start=1,
-        ):
-            filename, play, chairs = info
+        # fmt: off
+        info_list = [
+            ("Kongsemnene", "hovedscenen", HOVEDSCENE_STOLER),
+            ("Størst av alt er kjærligheten", "gamle-scene", GAMLE_SCENE_STOLER),
+        ]
+        # fmt: on
+        for i, info in enumerate(info_list, start=1):
+            play, filename, chairs = info
             scene = " ".join(filename.split("-")).title()
             with open(
                 f"reservations/{filename}.txt", encoding="utf-8"
