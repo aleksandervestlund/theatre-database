@@ -31,11 +31,11 @@ SQL_FILE = "creation/create.sql"
 
 
 class DatabaseCreator:
-    def __init__(self) -> None:
+    def __init__(self, db_name: str = DB_FILE) -> None:
         """Lager en tilkobling til en tom database."""
-        if os.path.exists(DB_FILE):
-            os.remove(DB_FILE)
-        self.con = sqlite3.connect(DB_FILE)
+        if os.path.exists(db_name):
+            os.remove(db_name)
+        self.con = sqlite3.connect(db_name)
         self.con.execute("PRAGMA foreign_keys = ON")
         self.cursor = self.con.cursor()
 
