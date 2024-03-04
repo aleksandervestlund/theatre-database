@@ -121,5 +121,7 @@ class DatabaseQueryer(DatabaseConnection):
             [(ticket_id, stage, seat[0], row, area, play, group) for seat in seat_numbers],
         )
         # fmt: on
+
         print("Takk for handelen!")
+        self.print_table("Billettkjøp")
         self.print_table("Billett")

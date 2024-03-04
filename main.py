@@ -5,7 +5,7 @@ from creation.database_queryer import DatabaseQueryer
 def main() -> None:
     dbc = DatabaseCreator()
     dbc.creation_query(False)
-    dbc.print_all_tables({"Dato", "Billett", "Stol"})
+    # dbc.print_all_tables({"Dato", "Billett", "Stol"})
     dbc.close(True)  # Lagrer ikke rader
 
     dbq = DatabaseQueryer()

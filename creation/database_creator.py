@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import os
 
-from creation.database_connection import DatabaseConnection
 from creation.config import (
     AKTER,
     ANSATTE,
@@ -23,6 +22,7 @@ from creation.config import (
     STOLER,
     TEATERSTYKKER,
 )
+from creation.database_connection import DatabaseConnection
 from creation.validators import validate_input
 
 
