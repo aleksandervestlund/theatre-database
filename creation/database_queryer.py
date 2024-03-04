@@ -29,14 +29,19 @@ class DatabaseQueryer(DatabaseConnection):
 
         print(f"Velkommen, {name}!")
         print("Hvilken forestilling ønsker du å se?")
-        play = validate_input(["Kongsemnene", "Størst av alt er kjærligheten"])
+        plays = [
+            play[0]
+            for play in self.con.execute(
+                "SELECT Navn FROM Teaterstykke"
+            ).fetchall()
+        ]
+        play = validate_input(plays)
         stage = self.cursor.execute(
             "SELECT SalNavn "
             "FROM Teaterstykke INNER JOIN Forestilling ON Navn = TeaterstykkeNavn "
             "WHERE Navn = ?",
             (play,),
         ).fetchone()[0]
-        print(stage)
 
         dates = [
             f"{day}/{month}"
@@ -47,7 +52,6 @@ class DatabaseQueryer(DatabaseConnection):
                 (play,),
             )
         ]
-
         print("Hvilken dato vil du se forestillingen?")
         day, month = [
             int(number) for number in validate_input(dates).split("/")
@@ -55,13 +59,13 @@ class DatabaseQueryer(DatabaseConnection):
 
         print("Hvor mange billetter ønsker du?")
         amount = int(input(""))
-
         fitting_seats = self.cursor.execute(
             "SELECT Område, RadNummer "
             "FROM Stol AS S1 "
             "WHERE SalNavn = ? AND (RadNummer, Område, Nummer) NOT IN ("
             "    SELECT S2.RadNummer, S2.Område, S2.Nummer "
-            "    FROM Stol AS S2 INNER JOIN Billett ON (S2.Nummer = StolNummer AND S2.RadNummer = Billett.RadNummer AND S2.Område = Billett.Område) "
+            "    FROM Stol AS S2 INNER JOIN Billett ON (S2.Nummer = StolNummer "
+            "    AND S2.RadNummer = Billett.RadNummer AND S2.Område = Billett.Område) "
             "    INNER JOIN Billettkjøp ON (BillettkjøpID = ID) "
             "    WHERE S2.Salnavn = S1.SalNavn AND Billettkjøp.TeaterstykkeNavn = ? AND DagVises = ? AND MånedVises = ?"
             ")"
@@ -70,6 +74,9 @@ class DatabaseQueryer(DatabaseConnection):
             "ORDER BY Område ASC, RadNummer",
             (stage, play, day, month, amount),
         ).fetchall()
+        if not fitting_seats:
+            print("Ikke nok seter tilgjengelige. Prøv igjen senere.")
+            return
 
         print("Følgende seter er tilgjengelige. Hvilke ønsker du?")
         area, row = validate_input(
@@ -87,7 +94,6 @@ class DatabaseQueryer(DatabaseConnection):
             "LIMIT ?",
             (stage, area, row, play, day, month, amount),
         ).fetchall()
-        print(seat_numbers)
 
         print("Hva slags billetter ønsker du?")
         groups = [
