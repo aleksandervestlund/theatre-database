@@ -4,7 +4,7 @@ from creation.validators import validate_input
 
 class DatabaseQueryer(DatabaseConnection):
     def order_tickets(self) -> None:
-        print("Ønsker du å kjøpe billetter? [j/n]")
+        print("Ønsker du å kjøpe billetter?")
         # if validate_input(["j", "n"]) == "n":
         #     return
 
@@ -15,7 +15,7 @@ class DatabaseQueryer(DatabaseConnection):
             "SELECT Navn FROM Kundeprofil WHERE Mobilnummer = ?", (phone,)
         ).fetchone()
         if name is None:
-            print("Du har ingen kundeprofil. Vil du opprette en? [j/n]")
+            print("Du har ingen kundeprofil. Vil du opprette en?")
             if validate_input(["j", "n"]) == "n":
                 return
 

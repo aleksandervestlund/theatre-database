@@ -104,7 +104,7 @@ class DatabaseCreator(DatabaseConnection):
             print("1: Lag en database med tomme tabeller.")
             print("2: Lag en database fylt med rader (u/reserverte seter).")
             print("3: Lag en database fylt med rader (m/reserverte seter).")
-            print("Hvilken mulighet ønsker du? [1/2/3]")
+            print("Hvilken mulighet ønsker du?")
             option = validate_input(["1", "2", "3"])
         else:
             option = "3"
