@@ -1,6 +1,9 @@
 DB_FILE = "teater.db"
 SQL_FILE = "creation/create.sql"
 
+TODAY_MONTH = 1
+TODAY_DAY = 15
+
 TEATERSTYKKER = [
     ("Kongsemnene", "Henrik Ibsen", "19.00"),
     ("Størst av alt er kjærligheten", "Jonas Corell Petersen", "18.30"),
