@@ -42,7 +42,7 @@ class DatabaseQueryer(DatabaseConnection):
             )
         ]
 
-        print("Hvilken dato vil du se den?")
+        print("Hvilken dato vil du se forestillingen?")
         # day, month = [
         #     int(number) for number in validate_input(dates).split("/")
         # ]
@@ -59,7 +59,7 @@ class DatabaseQueryer(DatabaseConnection):
             "INNER JOIN Billettkjøp ON (BillettkjøpID = ID) "
             "WHERE Billettkjøp.TeaterstykkeNavn = ? AND DagVises = ? AND MånedVises = ? "
             "GROUP BY Stol.RadNummer, Stol.Område "
-            "HAVING Antall < ?",
+            "HAVING Antall < 18 - ?",
             (play, day, month, amount),
         ).fetchall()
         print(fitting_seats)

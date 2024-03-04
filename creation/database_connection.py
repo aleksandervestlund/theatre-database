@@ -2,7 +2,7 @@ import sqlite3
 from collections.abc import Iterable
 from typing import Any
 
-from creation.rows import DB_FILE, TABLES
+from creation.config import DB_FILE, TABLES
 from creation.validators import validate_attribute_names, validate_table_name
 
 
@@ -36,7 +36,7 @@ class DatabaseConnection:
         self,
         table: str,
         rows: list[tuple[Any, ...]],
-        attributes: list[str] | None = None,
+        attributes: Iterable[str] | None = None,
     ) -> None:
         """Fyller en tabell med rader. Avhengig av at `create_tables`
         har blitt kjørt først. Alle tupler i `rows` må ha samme lengde

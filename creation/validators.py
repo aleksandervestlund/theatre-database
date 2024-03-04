@@ -1,12 +1,14 @@
 from collections.abc import Iterable
 from sqlite3 import OperationalError
 
-from creation.rows import ATTRIBUTES, TABLES
+from creation.config import ATTRIBUTES, TABLES
 
 
 def validate_table_name(table_name: str) -> None:
     """Validerer tabellnavnet for å forhindre SQL-injection.
     Case-sensitiv.
+
+    :param str table_name: Tabellnavn
     """
     if table_name not in TABLES:
         raise OperationalError(f"Ugyldig tabellnavn: {table_name}.")
@@ -15,6 +17,8 @@ def validate_table_name(table_name: str) -> None:
 def validate_attribute_names(attribute_names: Iterable[str]) -> None:
     """Validerer attributtnavn for å forhindre SQL-injection.
     Case-sensitiv.
+
+    :param Iterable[str] attribute_names: Attributtnavn
     """
     for attribute in attribute_names:
         if attribute not in ATTRIBUTES:
@@ -23,8 +27,9 @@ def validate_attribute_names(attribute_names: Iterable[str]) -> None:
 
 def validate_input(legal_answers: Iterable[str]) -> str:
     """Tar inn input fra brukeren og sjekker at det er gyldig.
+    Case-sensitivt.
 
-    :param set[str] legal_answers: Lovlige svar
+    :param Iertable[str] legal_answers: Lovlige input-verdier
     """
     print(f"Mulige svar: {', '.join(legal_answers)}")
     while (answer := input("")) not in legal_answers:

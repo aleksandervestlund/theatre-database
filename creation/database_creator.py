@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 
 from creation.database_connection import DatabaseConnection
-from creation.rows import (
+from creation.config import (
     AKTER,
     ANSATTE,
     DATOER,
@@ -23,6 +23,7 @@ from creation.rows import (
     STOLER,
     TEATERSTYKKER,
 )
+from creation.validators import validate_input
 
 
 class DatabaseCreator(DatabaseConnection):
@@ -104,9 +105,7 @@ class DatabaseCreator(DatabaseConnection):
             print("2: Lag en database fylt med rader (u/reserverte seter).")
             print("3: Lag en database fylt med rader (m/reserverte seter).")
             print("Hvilken mulighet ønsker du? [1/2/3]")
-
-            while (option := input("")) not in {"1", "2", "3"}:
-                print("Ugyldig input. Prøv igjen.")
+            option = validate_input(["1", "2", "3"])
         else:
             option = "3"
 
