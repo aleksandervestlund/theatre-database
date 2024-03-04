@@ -19,9 +19,9 @@ CREATE TABLE IF NOT EXISTS Ansatt (
     ID INTEGER NOT NULL,
     Ansattstatus TEXT NOT NULL,
     EPostadresse TEXT,
-    Navn  NOT NULL,
-    TeaterstykkeNavn ,
-    OppgaveNavn TEXT,
+    Navn NOT NULL,
+    TeaterstykkeNavn TEXT NOT NULL,
+    OppgaveNavn TEXT NOT NULL,
     PRIMARY KEY (ID),
     FOREIGN KEY (TeaterstykkeNavn, OppgaveNavn)
         REFERENCES Oppgave (TeaterstykkeNavn, Navn)
@@ -94,8 +94,8 @@ CREATE TABLE IF NOT EXISTS Sal (
 CREATE TABLE IF NOT EXISTS Stol (
     SalNavn TEXT NOT NULL,
     Nummer INTEGER NOT NULL,
-    RadNummer INTEGER DEFAULT 0 NOT NULL,
-    Område TEXT DEFAULT "" NOT NULL,
+    RadNummer INTEGER NOT NULL,
+    Område TEXT NOT NULL,
     PRIMARY KEY (SalNavn, Nummer, RadNummer, Område),
     FOREIGN KEY (SalNavn)
         REFERENCES Sal (Navn)
@@ -158,6 +158,7 @@ CREATE TABLE IF NOT EXISTS Gruppe (
     TeaterstykkeNavn TEXT NOT NULL,
     Navn TEXT NOT NULL,
     Pris INTEGER NOT NULL,
+    Pris10 INTEGER NOT NULL,
     PRIMARY KEY (TeaterstykkeNavn, Navn),
     FOREIGN KEY (TeaterstykkeNavn)
         REFERENCES Teaterstykke (Navn)

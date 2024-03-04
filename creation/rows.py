@@ -59,7 +59,7 @@ ROLLER = [
     # Størst av alt er kjærligheten
     ("Sunniva Du Mond Nordal",),
     ("Jo Saberniak",),
-    ("Marte M. Steinholt",),
+    ("Marte Mortensdatter Steinholt",),
     ("Tor Ivar Hagen",),
     ("Trond-Ove Skrødal",),
     ("Natalie Grøndahl Tangen",),
@@ -84,7 +84,7 @@ DELTAR_I.extend([("Dagfinn Bonde", "Kongsemnene", i) for i in range(1, 6)])
 DELTAR_I.extend([("Peter", "Kongsemnene", i) for i in range(3, 6)])
 DELTAR_I.append(("Sunniva Du Mond Nordal", "Størst av alt er kjærligheten", 1))
 DELTAR_I.append(("Jo Saberniak", "Størst av alt er kjærligheten", 1))
-DELTAR_I.append(("Marte M. Steinholt", "Størst av alt er kjærligheten", 1))
+DELTAR_I.append(("Marte Mortensdatter Steinholt", "Størst av alt er kjærligheten", 1))
 DELTAR_I.append(("Tor Ivar Hagen", "Størst av alt er kjærligheten", 1))
 DELTAR_I.append(("Trond-Ove Skrødal", "Størst av alt er kjærligheten", 1))
 DELTAR_I.append(("Natalie Grøndahl Tangen", "Størst av alt er kjærligheten", 1))
@@ -109,7 +109,7 @@ SKUESPILLERE = [
     # Størst av alt er kjærligheten
     ("Sunniva Du Mond Nordal",),
     ("Jo Saberniak",),
-    ("Marte M. Steinholt",),
+    ("Marte Mortensdatter Steinholt",),
     ("Tor Ivar Hagen",),
     ("Trond-Ove Skrødal",),
     ("Natalie Grøndahl Tangen",),
@@ -135,7 +135,7 @@ SPILLER_ROLLER = [
     # Størst av alt er kjærligheten
     (13, "Sunniva Du Mond Nordal"),
     (14, "Jo Saberniak"),
-    (15, "Marte M. Steinholt"),
+    (15, "Marte Mortensdatter Steinholt"),
     (16, "Tor Ivar Hagen"),
     (17, "Trond-Ove Skrødal"),
     (18, "Natalie Grøndahl Tangen"),
@@ -157,20 +157,20 @@ SALER = [
 # fmt: off
 STOLER = []
 HOVEDSCENE_STOLER = []
-HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "") for plass in range(1, 467)])
-HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "") for plass in range(471, 495)])
-HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "") for plass in range(499, 505)])
-HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 505) // 10) + 1, "Galleri") for plass in range(505, 525)])
+HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "Parkett") for plass in range(1, 467)])
+HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "Parkett") for plass in range(471, 495)])
+HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "Parkett") for plass in range(499, 505)])
+HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 505) // 5) + 1, "Galleri") for plass in range(505, 525)])
 STOLER.extend(HOVEDSCENE_STOLER)
 
 GAMLE_SCENE_STOLER = []
 GAMLE_SCENE_STOLER.extend([("Gamle Scene", plass, 1, "Parkett") for plass in range(1, 19)])
 GAMLE_SCENE_STOLER.extend([("Gamle Scene", plass, 2, "Parkett") for plass in range(1, 17)])
 GAMLE_SCENE_STOLER.extend([("Gamle Scene", plass, 3, "Parkett") for plass in range(1, 18)])
-GAMLE_SCENE_STOLER.extend([("Gamle Scene", plass, rad, "Parkett") for plass in range(1, 19) for rad in (4, 5)])
+GAMLE_SCENE_STOLER.extend([("Gamle Scene", plass, rad, "Parkett") for rad in (4, 5) for plass in range(1, 19)])
 GAMLE_SCENE_STOLER.extend([("Gamle Scene", plass, 6, "Parkett") for plass in range(1, 18)])
 GAMLE_SCENE_STOLER.extend([("Gamle Scene", plass, 7, "Parkett") for plass in range(1, 19)])
-GAMLE_SCENE_STOLER.extend([("Gamle Scene", plass, rad, "Parkett") for plass in range(1, 18) for rad in (8, 9)])
+GAMLE_SCENE_STOLER.extend([("Gamle Scene", plass, rad, "Parkett") for rad in (8, 9) for plass in range(1, 18)])
 GAMLE_SCENE_STOLER.extend([("Gamle Scene", plass, 10, "Parkett") for plass in range(1, 15)])
 GAMLE_SCENE_STOLER.extend([("Gamle Scene", plass, 1, "Balkong") for plass in range(1, 29)])
 GAMLE_SCENE_STOLER.extend([("Gamle Scene", plass, 2, "Balkong") for plass in range(1, 28)])
@@ -200,18 +200,17 @@ FORESTILLINGER = [
 KUNDEPROFILER = [("004700000000", "Høgskoleringen 1", "Holters")]
 
 GRUPPER = [
-    ("Kongsemnene", "Ordinær", "450"),
-    ("Kongsemnene", "Honnør", "380"),
-    ("Kongsemnene", "Student", "280"),
-    ("Størst av alt er kjærligheten", "Ordinær", "350"),
-    ("Størst av alt er kjærligheten", "Honnør", "300"),
-    ("Størst av alt er kjærligheten", "Student", "220"),
-    ("Størst av alt er kjærligheten", "Barn", "220"),
+    ("Kongsemnene", "Ordinær", 450, 420),
+    ("Kongsemnene", "Honnør", 380, 360),
+    ("Kongsemnene", "Student", 280, 280),
+    ("Størst av alt er kjærligheten", "Ordinær", 350, 320),
+    ("Størst av alt er kjærligheten", "Honnør", 300, 270),
+    ("Størst av alt er kjærligheten", "Student", 220, 220),
+    ("Størst av alt er kjærligheten", "Barn", 220, 220),
 ]
 
 TABLES = [
     "Teaterstykke",
-    "Gruppe",
     "Oppgave",
     "Ansatt",
     "Akt",
@@ -224,6 +223,7 @@ TABLES = [
     "Stol",
     "Forestilling",
     "Kundeprofil",
+    "Gruppe",
     "Billettkjøp",
     "Billett",
 ]

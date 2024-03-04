@@ -150,8 +150,8 @@ class DatabaseCreator:
     def close(self, commit: bool = True) -> None:
         """Lukker tilkoblingen til databasen. Må kjøres til slutt.
 
-        :param bool commit: Om endringene skal lagres, defaulter til
-        True
+        :param bool commit: Om endringene på radene skal lagres,
+        defaulter til True
         """
         self.con.execute("PRAGMA analysis_limit=1000")
         self.con.execute("PRAGMA optimize")

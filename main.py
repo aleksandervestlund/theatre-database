@@ -30,9 +30,9 @@ def query_user(db: DatabaseCreator, query: bool = True) -> None:
 
 def main() -> None:
     db = DatabaseCreator()
-    query_user(db, True)
+    query_user(db, False)
     try:
-        db.print_all_tables(["Dato", "Stol", "Billett"])
+        db.print_all_tables(["Dato", "Billett"])
     except OperationalError:
         print("Ingen tabeller.")
     db.close(False)  # Lagrer ikke rader til db1
