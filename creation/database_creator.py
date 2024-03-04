@@ -72,7 +72,7 @@ class DatabaseCreator:
         har blitt kjørt først. Alle tupler i `rows` må ha samme lengde
         og bruke samme `attributes`.
 
-        :param str table: Navnet på tabellen
+        :param str table: Navn på tabellen
         :param list[tuple[Any, ...]] rows: Rader som skal legges til
         :param list[str] attributes: Attributtene som skal settes inn,
         defaulter til None
@@ -98,7 +98,7 @@ class DatabaseCreator:
             ("Størst av alt er kjærligheten", "gamle-scene", GAMLE_SCENE_STOLER),
         ]
         # fmt: on
-        for i, info in enumerate(info_list, start=1):
+        for i, info in enumerate(info_list, 1):
             play, filename, chairs = info
             scene = " ".join(filename.split("-")).title()
             with open(
@@ -112,7 +112,6 @@ class DatabaseCreator:
                     for line in reversed(file.readlines())
                     if line[0] in {"0", "1", "x"}
                 )
-                seats_string = seats_string.replace("x", "")
 
             self.insert_rows(
                 "Billettkjøp",
