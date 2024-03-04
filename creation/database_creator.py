@@ -112,6 +112,7 @@ class DatabaseCreator:
                     for line in reversed(file.readlines())
                     if line[0] in {"0", "1", "x"}
                 )
+                seats_string = seats_string.replace("x", "")
 
             self.insert_rows(
                 "Billettkjøp",
