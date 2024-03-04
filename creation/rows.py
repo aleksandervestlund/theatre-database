@@ -1,3 +1,6 @@
+DB_FILE = "teater.db"
+SQL_FILE = "creation/create.sql"
+
 TEATERSTYKKER = [
     ("Kongsemnene", "Henrik Ibsen", "19.00"),
     ("Størst av alt er kjærligheten", "Jonas Corell Petersen", "18.30"),

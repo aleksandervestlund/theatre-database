@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import os
-import sqlite3
-from typing import Any
 
+from creation.database_connection import DatabaseConnection
 from creation.rows import (
     AKTER,
     ANSATTE,
     DATOER,
+    DB_FILE,
     DELTAR_I,
     FORESTILLINGER,
     GAMLE_SCENE_STOLER,
@@ -17,76 +17,25 @@ from creation.rows import (
     OPPGAVER,
     ROLLER,
     SALER,
-    STOLER,
     SKUESPILLERE,
     SPILLER_ROLLER,
-    TABLES,
+    SQL_FILE,
+    STOLER,
     TEATERSTYKKER,
 )
-from creation.validators import validate_attribute_names, validate_table_name
 
 
-DB_FILE = "teater.db"
-SQL_FILE = "creation/create.sql"
-
-
-class DatabaseCreator:
-    def __init__(self, db_name: str = DB_FILE) -> None:
+class DatabaseCreator(DatabaseConnection):
+    def __init__(self) -> None:
         """Lager en tilkobling til en tom database."""
-        if os.path.exists(db_name):
-            os.remove(db_name)
-        self.con = sqlite3.connect(db_name)
-        self.con.execute("PRAGMA foreign_keys = ON")
-        self.cursor = self.con.cursor()
-
-    def print_table(self, table: str) -> None:
-        validate_table_name(table)
-        length = len(table)
-        dashes = "-" * ((78 - length) // 2)
-        print(f"{dashes} {table} {dashes}{'-' * (length % 2)}")
-        for row in self.cursor.execute(f"SELECT * FROM {table}"):
-            print(row)
-
-    def print_all_tables(self, mute_tables: list[str] | None = None) -> None:
-        """Printer alle tabellene i databasen.
-
-        :param list[str] | None mute_tables: Tabeller som ikke skal
-        printes, defaulter til None
-        """
-        for table in TABLES:
-            if mute_tables is None or table not in mute_tables:
-                self.print_table(table)
+        if os.path.exists(DB_FILE):
+            os.remove(DB_FILE)
+        super().__init__()
 
     def create_tables(self) -> None:
         """Kjører `SQL_FILE`."""
         with open(SQL_FILE, encoding="utf-8") as file:
             self.con.executescript(file.read())
-
-    def insert_rows(
-        self,
-        table: str,
-        rows: list[tuple[Any, ...]],
-        attributes: list[str] | None = None,
-    ) -> None:
-        """Fyller en tabell med rader. Avhengig av at `create_tables`
-        har blitt kjørt først. Alle tupler i `rows` må ha samme lengde
-        og bruke samme `attributes`.
-
-        :param str table: Navn på tabellen
-        :param list[tuple[Any, ...]] rows: Rader som skal legges til
-        :param list[str] attributes: Attributtene som skal settes inn,
-        defaulter til None
-        """
-        if not rows:
-            return
-        validate_table_name(table)
-        command = f"INSERT INTO {table} "
-        if attributes is not None:
-            validate_attribute_names(attributes)
-            command += f"({', '.join(attributes)}) "
-        command += f"VALUES ({', '.join(('?') * len(rows[0]))})"
-        for row in rows:
-            self.cursor.execute(command, row)
 
     def book_reserved_seats(self) -> None:
         """Leser filene i `reservations`. Lager et billettkjøp og
@@ -118,10 +67,9 @@ class DatabaseCreator:
                 [(i, 1, 1, KUNDEPROFILER[0][0], play, scene, month, day)],
             )
             for j, seat in enumerate(seats_string):
-                if seat == "1":
-                    self.insert_rows(
-                        "Billett", [(i, *chairs[j], play, "Ordinær")]
-                    )
+                if seat != "1":
+                    continue
+                self.insert_rows("Billett", [(i, *chairs[j], play, "Ordinær")])
 
     def fill_tables(self) -> None:
         """Fyller tabellene med data fra `rows.py`. Avhengig av at
@@ -145,16 +93,27 @@ class DatabaseCreator:
         self.insert_rows("Forestilling", FORESTILLINGER)
         self.insert_rows("Kundeprofil", KUNDEPROFILER)
         self.insert_rows("Gruppe", GRUPPER)
-        self.book_reserved_seats()
 
-    def close(self, commit: bool = True) -> None:
-        """Lukker tilkoblingen til databasen. Må kjøres til slutt.
+    def creation_query(self, query: bool = True) -> None:
+        """Spør brukeren hvor utfylt database de ønsker.
 
-        :param bool commit: Om endringene på radene skal lagres,
-        defaulter til True
+        :param bool query: Om brukeren skal bli spurt, defaulter til True
         """
-        self.con.execute("PRAGMA analysis_limit=1000")
-        self.con.execute("PRAGMA optimize")
-        if commit:
-            self.con.commit()
-        self.con.close()
+        if query:
+            print("1: Lag en database med tomme tabeller.")
+            print("2: Lag en database fylt med rader (u/reserverte seter).")
+            print("3: Lag en database fylt med rader (m/reserverte seter).")
+            print("Hvilken mulighet ønsker du? [1/2/3]")
+
+            while (option := input("")) not in {"1", "2", "3"}:
+                print("Ugyldig input. Prøv igjen.")
+        else:
+            option = "3"
+
+        self.create_tables()
+        if option == "1":
+            return
+        self.fill_tables()
+        if option == "2":
+            return
+        self.book_reserved_seats()

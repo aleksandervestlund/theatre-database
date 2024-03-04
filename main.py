@@ -1,41 +1,16 @@
-from sqlite3 import OperationalError
-
 from creation.database_creator import DatabaseCreator
-
-
-def query_user(db: DatabaseCreator, query: bool = True) -> None:
-    """Spør brukeren hvor utfylt database de ønsker.
-
-    :param DatabaseCreator db: Databasen som skal endres
-    :param bool query: Om brukeren skal bli spurt, defaulter til True
-    """
-    if query:
-        print("Mulighet 1: Lag en tom database.")
-        print("Mulighet 2: Lag en database med tomme tabeller.")
-        print("Mulighet 3: Lag en database fylt med rader.")
-        print("Hvilken mulighet ønsker du? [1/2/3]")
-
-        while (option := input("")) not in {"1", "2", "3"}:
-            print("Ugyldig input. Prøv igjen.")
-    else:
-        option = "3"
-
-    if option == "1":
-        return
-    db.create_tables()
-    if option == "2":
-        return
-    db.fill_tables()
+from creation.database_queryer import DatabaseQueryer
 
 
 def main() -> None:
-    db = DatabaseCreator()
-    query_user(db, False)
-    try:
-        db.print_all_tables(["Dato"])
-    except OperationalError:
-        print("Ingen tabeller.")
-    db.close(False)  # Lagrer ikke rader til db1
+    dbc = DatabaseCreator()
+    dbc.creation_query(False)
+    dbc.print_all_tables({"Dato", "Billett", "Stol"})
+    dbc.close(True)  # Lagrer ikke rader
+
+    dbq = DatabaseQueryer()
+    dbq.order_tickets()
+    dbq.close(False)
 
 
 if __name__ == "__main__":
