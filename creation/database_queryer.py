@@ -1,3 +1,5 @@
+import re
+
 from creation.config import TODAY_DAY, TODAY_MONTH
 from creation.database_connection import DatabaseConnection
 from creation.validators import validate_input
@@ -37,7 +39,16 @@ class DatabaseQueryer(DatabaseConnection):
             return
 
         print("Hva er ditt telefonnummer?")
-        phone = input("")
+        phone = input("[SVAR]: ")
+        # while (
+        #     not re.fullmatch(
+        #         r"((((00)|\+)47)|)[49]\d{7}",
+        #         (phone := input("[SVAR]: ")),
+        #     )
+        #     is not None
+        # ):
+        #     print("Ugyldig telefonnummer. Prøv igjen.")
+
         name = self.cursor.execute(
             "SELECT Navn FROM Kundeprofil WHERE Mobilnummer = ?", (phone,)
         ).fetchone()
@@ -47,9 +58,9 @@ class DatabaseQueryer(DatabaseConnection):
                 return
 
             print("Hva er ditt navn?")
-            name = input("")
+            name = input("[SVAR]: ")
             print("Hva er din adresse?")
-            address = input("")
+            address = input("[SVAR]: ")
             self.insert_rows("Kundeprofil", [(phone, address, name)])
         else:
             name = name[0]
@@ -89,7 +100,7 @@ class DatabaseQueryer(DatabaseConnection):
         ]
 
         print("Hvor mange billetter ønsker du?")
-        amount = int(input(""))
+        amount = int(input("[SVAR]: "))
         fitting_seats = self.cursor.execute(
             """
             SELECT Område, RadNummer
@@ -170,6 +181,15 @@ class DatabaseQueryer(DatabaseConnection):
         )
         # fmt: on
 
+        price = self.cursor.execute(
+            """
+            SELECT SUM(Pris) FROM Billett INNER JOIN Gruppe ON
+                (Billett.TeaterstykkeNavn = Gruppe.TeaterstykkeNavn
+                AND GruppeNavn = Navn)
+            WHERE BillettkjøpID = ?
+            """,
+            (ticket_id,),
+        ).fetchone()[0]
+
+        print(f"Prisen for alle billettene er {price} kr.")
         print("Takk for handelen!")
-        self.print_table("Billettkjøp")
-        self.print_table("Billett")

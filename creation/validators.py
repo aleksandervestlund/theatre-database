@@ -29,9 +29,9 @@ def validate_input(legal_answers: Iterable[str]) -> str:
     """Tar inn input fra brukeren og sjekker at det er gyldig.
     Case-sensitivt.
 
-    :param Iertable[str] legal_answers: Lovlige input-verdier
+    :param Iterable[str] legal_answers: Lovlige input-verdier
     """
     print(f"Mulige svar: {', '.join(legal_answers)}")
-    while (answer := input("")) not in legal_answers:
+    while (answer := input("[SVAR]: ")) not in legal_answers:
         print("Ugyldig input. Prøv igjen.")
     return answer

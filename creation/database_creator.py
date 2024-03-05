@@ -30,6 +30,7 @@ class DatabaseCreator(DatabaseConnection):
     def clear_database(self) -> None:
         if os.path.exists(DB_FILE):
             os.remove(DB_FILE)
+        self.connect()
 
     def create_tables(self) -> None:
         """Kjører `SQL_FILE`."""
@@ -107,7 +108,6 @@ class DatabaseCreator(DatabaseConnection):
             match validate_input(["1", "2", "3", "4", "5"]):
                 case "1":
                     self.clear_database()
-                    self.connect()
                 case "2":
                     self.create_tables()
                 case "3":
