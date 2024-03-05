@@ -21,9 +21,9 @@ def main() -> None:
                 dbc.ask_user()
                 dbc.close(True)
             case "2":
-                dbq = DBTicketOrderer()
-                dbq.ask_user()
-                dbq.close(True)
+                dbtc = DBTicketOrderer()
+                dbtc.ask_user()
+                dbtc.close(True)
             case "3":
                 dbq = DBQueryer()
                 dbq.ask_user()
@@ -31,7 +31,9 @@ def main() -> None:
             case "4":
                 break
 
-    DBConnector().print_all_tables()
+    dbc2 = DBConnector()
+    dbc2.print_all_tables()
+    dbc2.close(False)
 
 
 if __name__ == "__main__":

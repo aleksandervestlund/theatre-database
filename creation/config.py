@@ -1,5 +1,5 @@
 DB_FILE = "teater.db"
-SQL_FILE = "creation/create.sql"
+SQL_FILE = "creation/schema.sql"
 
 TODAY_MONTH = 1
 TODAY_DAY = 15
