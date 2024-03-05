@@ -47,8 +47,8 @@ class DatabaseConnection:
 
         :param str table: Navn på tabellen
         :param list[tuple[Any, ...]] rows: Rader som skal legges til
-        :param list[str] attributes: Attributtene som skal settes inn,
-        defaulter til None
+        :param Iterable[str] attributes: Attributtene som skal settes
+        inn, defaulter til None
         """
         if not rows:
             return
