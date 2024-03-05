@@ -31,22 +31,17 @@ class DBQueryer(DBConnector):
             input("Trykk enter for å fortsette.")
 
     def pretty_print(self, attributes: list[str], rows: list[tuple]) -> None:
-        """Printer ut en tabell med attributter og rader.
+        """Printer ut en tabell med attributter og rader. Hver rad må ha
+        like mange elementer som det er attributter.
 
         :param list[str] attributes: Attributtene som skal stå over
         tabellen
         :param list[tuple] rows: Radene som skal printes ut
         """
-        if len(rows[0]) != len(attributes):
-            raise ValueError(
-                "Antall attributter og antall rader må være like."
-            )
-
         max_lengths = [len(attribute) for attribute in attributes]
-        for i in range(len(attributes)):
+        for i in range(len(rows[0])):
             for row in rows:
-                value = row[i]
-                max_lengths[i] = max(max_lengths[i], len(str(value)))
+                max_lengths[i] = max(max_lengths[i], len(str(row[i])))
 
         separator = "+"
         for length in max_lengths:

@@ -7,18 +7,14 @@ from creation.validators import validate_input
 
 def get_phone_number() -> str:
     print("Hva er ditt telefonnummer?")
-    while (
-        re.fullmatch(
-            r"((0047)|)[49]\d{7}",
-            (phone := input("[SVAR]: ")),
-        )
-        is not None
-    ):
-        print("Ugyldig telefonnummer. Prøv igjen.")
-
-    if len(phone) == 8:
-        phone = "0047" + phone
-    return phone
+    while True:
+        phone = input("[SVAR]: ")
+        if not re.match(r"^(0047)?\d{8}$", phone):
+            print("Ugyldig telefonnummer. Prøv igjen.")
+            continue
+        if len(phone) == 8:
+            phone = "0047" + phone
+        return phone
 
 
 class DBTicketOrderer(DBConnector):
