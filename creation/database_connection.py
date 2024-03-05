@@ -8,6 +8,9 @@ from creation.validators import validate_attribute_names, validate_table_name
 
 class DatabaseConnection:
     def __init__(self) -> None:
+        self.connect()
+
+    def connect(self) -> None:
         self.con = sqlite3.connect(DB_FILE)
         self.con.execute("PRAGMA foreign_keys = ON")
         self.cursor = self.con.cursor()

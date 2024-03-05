@@ -27,11 +27,9 @@ from creation.validators import validate_input
 
 
 class DatabaseCreator(DatabaseConnection):
-    def __init__(self) -> None:
-        """Lager en tilkobling til en tom database."""
+    def clear_database(self) -> None:
         if os.path.exists(DB_FILE):
             os.remove(DB_FILE)
-        super().__init__()
 
     def create_tables(self) -> None:
         """Kjører `SQL_FILE`."""
@@ -95,24 +93,26 @@ class DatabaseCreator(DatabaseConnection):
         self.insert_rows("Kundeprofil", KUNDEPROFILER)
         self.insert_rows("Gruppe", GRUPPER)
 
-    def creation_query(self, query: bool = True) -> None:
-        """Spør brukeren hvor utfylt database de ønsker.
-
-        :param bool query: Om brukeren skal bli spurt, defaulter til True
-        """
-        if query:
-            print("1: Lag en database med tomme tabeller.")
-            print("2: Lag en database fylt med rader (u/reserverte seter).")
-            print("3: Lag en database fylt med rader (m/reserverte seter).")
+    def ask_user(self) -> None:
+        """Spør brukeren hvor utfylt database de ønsker."""
+        while True:
+            print()
+            print("1: Tøm databasen.")
+            print("2: Fyll databasen med tabeller.")
+            print("3: Fyll databasen med forhåndsbestemte rader.")
+            print("4: Reserver seter.")
+            print("5: Gå tilbake.")
             print("Hvilken mulighet ønsker du?")
-            option = validate_input(["1", "2", "3"])
-        else:
-            option = "3"
 
-        self.create_tables()
-        if option == "1":
-            return
-        self.fill_tables()
-        if option == "2":
-            return
-        self.book_reserved_seats()
+            match validate_input(["1", "2", "3", "4", "5"]):
+                case "1":
+                    self.clear_database()
+                    self.connect()
+                case "2":
+                    self.create_tables()
+                case "3":
+                    self.fill_tables()
+                case "4":
+                    self.book_reserved_seats()
+                case "5":
+                    return

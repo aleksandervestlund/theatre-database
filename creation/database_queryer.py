@@ -4,6 +4,33 @@ from creation.validators import validate_input
 
 
 class DatabaseQueryer(DatabaseConnection):
+    def ask_user(self) -> None:
+        while True:
+            print()
+            print("1: Kjøp billetter.")
+            print("2: Finn forestillinger.")
+            print("3: Finn skuespillere.")
+            print("4: Finn best solgte forestilling.")
+            print("5: Finn teaterstykker.")
+            print("6: Gå tilbake.")
+            print("Hva vil du gjøre?")
+
+            match validate_input([str(i) for i in range(1, 7)]):
+                case "1":
+                    self.order_tickets()
+                case "2":
+                    pass
+                case "3":
+                    pass
+                case "4":
+                    pass
+                case "5":
+                    pass
+                case "6":
+                    return
+
+            input("Trykk en tast for å fortsette.")
+
     def order_tickets(self) -> None:
         print("Ønsker du å kjøpe billetter?")
         if validate_input(["j", "n"]) == "n":
@@ -37,18 +64,22 @@ class DatabaseQueryer(DatabaseConnection):
         ]
         play = validate_input(plays)
         stage = self.cursor.execute(
-            "SELECT SalNavn "
-            "FROM Teaterstykke INNER JOIN Forestilling ON Navn = TeaterstykkeNavn "
-            "WHERE Navn = ?",
+            """
+            SELECT SalNavn
+            FROM Teaterstykke INNER JOIN Forestilling ON Navn = TeaterstykkeNavn
+            WHERE Navn = ?
+            """,
             (play,),
         ).fetchone()[0]
 
         dates = [
             f"{day}/{month}"
             for day, month in self.cursor.execute(
-                "SELECT DagVises, MånedVises FROM Forestilling "
-                "WHERE TeaterstykkeNavn = ? "
-                "ORDER BY MånedVises ASC, DagVises ASC",
+                """
+                SELECT DagVises, MånedVises FROM Forestilling
+                WHERE TeaterstykkeNavn = ?
+                ORDER BY MånedVises ASC, DagVises ASC
+                """,
                 (play,),
             )
         ]
@@ -60,38 +91,51 @@ class DatabaseQueryer(DatabaseConnection):
         print("Hvor mange billetter ønsker du?")
         amount = int(input(""))
         fitting_seats = self.cursor.execute(
-            "SELECT Område, RadNummer "
-            "FROM Stol AS S1 "
-            "WHERE SalNavn = ? AND (RadNummer, Område, Nummer) NOT IN ("
-            "    SELECT S2.RadNummer, S2.Område, S2.Nummer "
-            "    FROM Stol AS S2 INNER JOIN Billett ON (S2.Nummer = StolNummer "
-            "    AND S2.RadNummer = Billett.RadNummer AND S2.Område = Billett.Område) "
-            "    INNER JOIN Billettkjøp ON (BillettkjøpID = ID) "
-            "    WHERE S2.Salnavn = S1.SalNavn AND Billettkjøp.TeaterstykkeNavn = ? AND DagVises = ? AND MånedVises = ?"
-            ")"
-            "GROUP BY RadNummer, Område "
-            "HAVING COUNT(Nummer) >= ?"
-            "ORDER BY Område ASC, RadNummer",
+            """
+            SELECT Område, RadNummer
+            FROM Stol AS S1
+            WHERE SalNavn = ? AND (RadNummer, Område, Nummer) NOT IN (
+                SELECT S2.RadNummer, S2.Område, S2.Nummer
+                FROM Stol AS S2 INNER JOIN Billett ON (S2.Nummer = StolNummer
+                AND S2.RadNummer = Billett.RadNummer AND S2.Område = Billett.Område)
+                INNER JOIN Billettkjøp ON (BillettkjøpID = ID)
+                WHERE S2.Salnavn = S1.SalNavn AND Billettkjøp.TeaterstykkeNavn = ? AND DagVises = ? AND MånedVises = ?
+            )
+            GROUP BY RadNummer, Område
+            HAVING COUNT(Nummer) >= ?
+            ORDER BY Område ASC, RadNummer ASC
+            """,
             (stage, play, day, month, amount),
         ).fetchall()
         if not fitting_seats:
-            print("Ikke nok seter tilgjengelige. Prøv igjen senere.")
+            print(
+                "Ingen rader med så mange tilgjengelige seter. Prøv igjen "
+                "senere."
+            )
             return
 
-        print("Følgende seter er tilgjengelige. Hvilke ønsker du?")
+        print("Følgende rader er tilgjengelige. Hvilken ønsker du?")
         area, row = validate_input(
             [f"{area}:{row}" for area, row in fitting_seats]
         ).split(":")
         seat_numbers = self.cursor.execute(
-            "SELECT Nummer "
-            "FROM Stol AS S1 "
-            "WHERE SalNavn = ? AND Område = ? AND RadNummer = ? AND (RadNummer, Område, Nummer) NOT IN ("
-            "    SELECT S2.RadNummer, S2.Område, S2.Nummer "
-            "    FROM Stol AS S2 INNER JOIN Billett ON (S2.Nummer = StolNummer AND S2.RadNummer = Billett.RadNummer AND S2.Område = Billett.Område) "
-            "    INNER JOIN Billettkjøp ON (BillettkjøpID = ID) "
-            "    WHERE S2.Salnavn = S1.SalNavn AND S2.Område = S1.Område AND S2.RadNummer = S1.RadNummer AND Billettkjøp.TeaterstykkeNavn = ? AND DagVises = ? AND MånedVises = ? "
-            ")"
-            "LIMIT ?",
+            """
+            SELECT Nummer
+            FROM Stol AS S1
+            WHERE SalNavn = ? AND Område = ? AND RadNummer = ?
+                AND (RadNummer, Område, Nummer) NOT IN (
+                    SELECT S2.RadNummer, S2.Område, S2.Nummer
+                    FROM Stol AS S2 INNER JOIN Billett ON (S2.Nummer = StolNummer
+                        AND S2.RadNummer = Billett.RadNummer
+                        AND S2.Område = Billett.Område)
+                    INNER JOIN Billettkjøp ON (BillettkjøpID = ID)
+                    WHERE S2.Salnavn = S1.SalNavn AND S2.Område = S1.Område
+                        AND S2.RadNummer = S1.RadNummer
+                        AND Billettkjøp.TeaterstykkeNavn = ?
+                        AND DagVises = ? AND MånedVises = ?
+            )
+            LIMIT ?
+            """,
             (stage, area, row, play, day, month, amount),
         ).fetchall()
 
@@ -112,8 +156,12 @@ class DatabaseQueryer(DatabaseConnection):
             ["MånedKjøpt", "DagKjøpt", "KundeprofilMobilnummer", "TeaterstykkeNavn", "SalNavn", "MånedVises", "DagVises"],
         )
         ticket_id = self.cursor.execute(
-            "SELECT ID FROM Billettkjøp "
-            "WHERE MånedKjøpt = ? AND DagKjøpt = ? AND KundeprofilMobilnummer = ? AND TeaterstykkeNavn = ? AND SalNavn = ? AND MånedVises = ? AND DagVises = ?",
+            """
+            SELECT ID FROM Billettkjøp
+            WHERE MånedKjøpt = ? AND DagKjøpt = ?
+                AND KundeprofilMobilnummer = ? AND TeaterstykkeNavn = ?
+                AND SalNavn = ? AND MånedVises = ? AND DagVises = ?
+            """,
             (TODAY_MONTH, TODAY_DAY, phone, play, stage, month, day)
         ).fetchall()[-1][0]
         self.insert_rows(
