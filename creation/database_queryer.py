@@ -1,4 +1,4 @@
-import re
+# import re
 
 from creation.config import TODAY_DAY, TODAY_MONTH
 from creation.database_connection import DatabaseConnection

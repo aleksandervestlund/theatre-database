@@ -6,7 +6,7 @@ from creation.validators import validate_input
 def main() -> None:
     print("Hei! Velkommen til teateret.")
     while True:
-        
+        print()
         print("1: Endre database.")
         print("2: SQL-spørringer.")
         print("3: Avslutt.")
@@ -22,7 +22,7 @@ def main() -> None:
                 dbq.ask_user()
                 dbq.close(True)
             case "3":
-                return
+                break
 
 
 if __name__ == "__main__":

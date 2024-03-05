@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-import sqlite3
 from sqlite3 import IntegrityError
 
 from creation.config import (
