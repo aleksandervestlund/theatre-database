@@ -1,7 +1,5 @@
-from __future__ import annotations
-
 import os
-from sqlite3 import IntegrityError
+from sqlite3 import IntegrityError, OperationalError
 
 from creation.config import (
     AKTER,
@@ -27,7 +25,7 @@ from creation.database_connection import DatabaseConnection
 from creation.validators import validate_input
 
 
-class DatabaseCreator(DatabaseConnection):
+class DBCreator(DatabaseConnection):
     def clear_database(self) -> None:
         """Sletter databasen og kobler til på nytt."""
         if os.path.exists(DB_FILE):
@@ -118,11 +116,17 @@ class DatabaseCreator(DatabaseConnection):
                     except IntegrityError:
                         print("Tabellene er allerede fylt.")
                         continue
+                    except OperationalError:
+                        print("Tabellene er ikke opprettet.")
+                        continue
                 case "4":
                     try:
                         self.book_reserved_seats()
                     except IntegrityError:
                         print("Setene er allerede reservert.")
+                        continue
+                    except OperationalError:
+                        print("Tabellene er ikke opprettet.")
                         continue
                 case "5":
                     return
