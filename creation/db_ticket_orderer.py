@@ -1,7 +1,7 @@
 import re
 
 from creation.config import TODAY_DAY, TODAY_MONTH
-from creation.database_connection import DatabaseConnection
+from creation.db_connector import DBConnector
 from creation.validators import validate_input
 
 
@@ -21,7 +21,7 @@ def get_phone_number() -> str:
     return phone
 
 
-class TicketOrderer(DatabaseConnection):
+class DBTicketOrderer(DBConnector):
     def ask_user(self) -> None:
         print("Ønsker du å kjøpe billetter?")
         if validate_input(["j", "n"]) == "n":

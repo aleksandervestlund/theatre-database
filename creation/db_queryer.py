@@ -1,8 +1,8 @@
-from creation.database_connection import DatabaseConnection
+from creation.db_connector import DBConnector
 from creation.validators import validate_input
 
 
-class Queryer(DatabaseConnection):
+class DBQueryer(DBConnector):
     def ask_user(self) -> None:
         """Spør brukeren hva de vil gjøre og kjører de tilhørende
         funksjonene.
@@ -16,7 +16,7 @@ class Queryer(DatabaseConnection):
             print("5: Gå tilbake.")
             print("Hva vil du gjøre?")
 
-            match validate_input([str(i) for i in range(1, 7)]):
+            match validate_input([str(i) for i in range(1, 6)]):
                 case "1":
                     self.get_plays()
                 case "2":
@@ -26,7 +26,7 @@ class Queryer(DatabaseConnection):
                 case "4":
                     self.get_actors_in_same_act()
                 case "5":
-                    return
+                    break
 
             input("Trykk enter for å fortsette.")
 

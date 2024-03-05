@@ -21,11 +21,11 @@ from creation.config import (
     STOLER,
     TEATERSTYKKER,
 )
-from creation.database_connection import DatabaseConnection
+from creation.db_connector import DBConnector
 from creation.validators import validate_input
 
 
-class DBCreator(DatabaseConnection):
+class DBCreator(DBConnector):
     def clear_database(self) -> None:
         """Sletter databasen og kobler til på nytt."""
         if os.path.exists(DB_FILE):

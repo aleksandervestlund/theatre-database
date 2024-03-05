@@ -6,7 +6,7 @@ from creation.config import DB_FILE, TABLES
 from creation.validators import validate_attribute_names, validate_table_name
 
 
-class DatabaseConnection:
+class DBConnector:
     def __init__(self) -> None:
         self.connect()
 
