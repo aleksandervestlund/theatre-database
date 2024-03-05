@@ -41,6 +41,7 @@ class Queryer(DatabaseConnection):
             raise ValueError(
                 "Antall attributter og antall rader må være like."
             )
+
         max_lengths = [len(attribute) for attribute in attributes]
         for i in range(len(attributes)):
             for row in rows:
@@ -153,7 +154,8 @@ class Queryer(DatabaseConnection):
                 INNER JOIN SpillerRolle AS SR2 ON S2.ID = SR2.SkuespillerID
                 INNER JOIN DeltarI AS DI1 ON SR1.RolleNavn = DI1.RolleNavn
                 INNER JOIN DeltarI AS DI2 ON SR2.RolleNavn = DI2.RolleNavn
-            WHERE S1.Navn = ? AND S1.Navn <> S2.Navn
+            WHERE S1.Navn = ?
+                AND S1.Navn <> S2.Navn
                 AND DI1.TeaterstykkeNavn = DI2.TeaterstykkeNavn
                 AND DI1.AktNummer = DI2.AktNummer
             GROUP BY S1.Navn, S2.Navn
