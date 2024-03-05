@@ -7,22 +7,15 @@ from creation.validators import validate_input
 
 def get_phone_number() -> str:
     print("Hva er ditt telefonnummer?")
-    while True:
-        phone = input("[SVAR]: ")
-        if not re.match(r"^(0047)?\d{8}$", phone):
-            print("Ugyldig telefonnummer. Prøv igjen.")
-            continue
-        if len(phone) == 8:
-            phone = "0047" + phone
-        return phone
+    while re.match(r"^(0047)?\d{8}$", phone := input("[SVAR]: ")) is None:
+        print("Ugyldig telefonnummer. Prøv igjen.")
+    if len(phone) == 8:
+        phone = "0047" + phone
+    return phone
 
 
 class DBTicketOrderer(DBConnector):
     def ask_user(self) -> None:
-        print("Ønsker du å kjøpe billetter?")
-        if validate_input(["j", "n"]) == "n":
-            return
-
         phone = get_phone_number()
         name = self.cursor.execute(
             "SELECT Navn FROM Kundeprofil WHERE Mobilnummer = ?", (phone,)
@@ -41,7 +34,9 @@ class DBTicketOrderer(DBConnector):
         day, month = self.get_date(play)
 
         print("Hvor mange billetter ønsker du?")
-        amount = int(input("[SVAR]: "))
+        while not (amount := input("[SVAR]: ")).isdigit():
+            print("Ugyldig antall. Prøv igjen.")
+        amount = int(amount)
 
         fitting_seats = self.get_fitting_seats(play, stage, day, month, amount)
         if not fitting_seats:
@@ -61,96 +56,12 @@ class DBTicketOrderer(DBConnector):
             play, stage, day, month, amount, area, row
         )
         group = self.get_group(play)
-        self.book_tickets(
+        ticket_id = self.book_tickets(
             phone, play, stage, day, month, area, row, seat_numbers, group
         )
+        price = self.calculate_price(ticket_id)
+        print(f"Takk for handelen! Prisen for alle billettene er {price} kr.")
         input("Trykk enter for å fortsette.")
-
-    def book_tickets(
-        self,
-        phone: str,
-        play: str,
-        stage: str,
-        day: int,
-        month: int,
-        area: str,
-        row: int,
-        seat_numbers: list[int],
-        group: str,
-    ) -> None:
-        ticket_id = self.cursor.execute(
-            "SELECT MAX(ID) + 1 FROM Billettkjøp"
-        ).fetchone()[0]
-        self.insert_rows(
-            "Billettkjøp",
-            [
-                (
-                    ticket_id,
-                    TODAY_MONTH,
-                    TODAY_DAY,
-                    phone,
-                    play,
-                    stage,
-                    month,
-                    day,
-                )
-            ],
-        )
-        self.insert_rows(
-            "Billett",
-            [
-                (ticket_id, stage, seat, row, area, play, group)
-                for seat in seat_numbers
-            ],
-        )
-        price = self.cursor.execute(
-            """
-            SELECT SUM(Pris)
-            FROM Billett INNER JOIN Gruppe
-                ON (Billett.TeaterstykkeNavn = Gruppe.TeaterstykkeNavn
-                    AND GruppeNavn = Navn)
-            WHERE BillettkjøpID = ?
-            """,
-            (ticket_id,),
-        ).fetchone()[0]
-        print(f"Prisen for alle billettene er {price} kr.")
-        print("Takk for handelen!")
-
-    def get_seat_numbers(
-        self,
-        play: str,
-        stage: str,
-        day: int,
-        month: int,
-        amount: int,
-        area: str,
-        row: int,
-    ) -> list[int]:
-        return [
-            seat[0]
-            for seat in self.cursor.execute(
-                """
-            SELECT Nummer
-            FROM Stol AS S1
-            WHERE SalNavn = ? AND Område = ? AND RadNummer = ?
-                AND (RadNummer, Område, Nummer) NOT IN (
-                    SELECT S2.RadNummer, S2.Område, S2.Nummer
-                    FROM Stol AS S2
-                        INNER JOIN Billett ON (S2.Nummer = StolNummer
-                            AND S2.RadNummer = Billett.RadNummer
-                            AND S2.Område = Billett.Område)
-                        INNER JOIN Billettkjøp ON (BillettkjøpID = ID)
-                    WHERE S2.Salnavn = S1.SalNavn
-                        AND S2.Område = S1.Område
-                        AND S2.RadNummer = S1.RadNummer
-                        AND Billettkjøp.TeaterstykkeNavn = ?
-                        AND DagVises = ? AND MånedVises = ?
-            )
-            LIMIT ?
-            """,
-                (stage, area, row, play, day, month, amount),
-            ).fetchall()
-        ]
 
     def create_user(self, phone: str) -> None:
         print("Hva er ditt navn?")
@@ -168,6 +79,17 @@ class DBTicketOrderer(DBConnector):
             ).fetchall()
         ]
         return validate_input(plays)
+
+    def get_stage(self, play: str) -> str:
+        return self.cursor.execute(
+            """
+            SELECT SalNavn
+            FROM Teaterstykke INNER JOIN Forestilling
+                ON Navn = TeaterstykkeNavn
+            WHERE Navn = ?
+            """,
+            (play,),
+        ).fetchone()[0]
 
     def get_date(self, play: str) -> tuple[int, int]:
         dates = [
@@ -187,17 +109,6 @@ class DBTicketOrderer(DBConnector):
             int(number) for number in validate_input(dates).split("/")
         ]
         return day, month
-
-    def get_group(self, play: str) -> str:
-        print("Hva slags billetter ønsker du?")
-        groups = [
-            group[0]
-            for group in self.cursor.execute(
-                "SELECT Navn FROM Gruppe WHERE TeaterstykkeNavn = ?",
-                (play,),
-            ).fetchall()
-        ]
-        return validate_input(groups)
 
     def get_fitting_seats(
         self, play: str, stage: str, day: int, month: int, amount: int
@@ -225,13 +136,95 @@ class DBTicketOrderer(DBConnector):
             (stage, play, day, month, amount),
         ).fetchall()
 
-    def get_stage(self, play: str) -> str:
-        return self.cursor.execute(
+    def get_seat_numbers(
+        self,
+        play: str,
+        stage: str,
+        day: int,
+        month: int,
+        amount: int,
+        area: str,
+        row: int,
+    ) -> list[int]:
+        return [
+            seat[0]
+            for seat in self.cursor.execute(
+                """
+                SELECT Nummer
+                FROM Stol AS S1
+                WHERE SalNavn = ? AND Område = ? AND RadNummer = ?
+                    AND (RadNummer, Område, Nummer) NOT IN (
+                        SELECT S2.RadNummer, S2.Område, S2.Nummer
+                        FROM Stol AS S2
+                            INNER JOIN Billett ON (S2.Nummer = StolNummer
+                                AND S2.RadNummer = Billett.RadNummer
+                                AND S2.Område = Billett.Område)
+                            INNER JOIN Billettkjøp ON (BillettkjøpID = ID)
+                        WHERE S2.Salnavn = S1.SalNavn
+                            AND S2.Område = S1.Område
+                            AND S2.RadNummer = S1.RadNummer
+                            AND Billettkjøp.TeaterstykkeNavn = ?
+                            AND DagVises = ? AND MånedVises = ?
+                )
+                LIMIT ?
+                """,
+                (stage, area, row, play, day, month, amount),
+            ).fetchall()
+        ]
+
+    def get_group(self, play: str) -> str:
+        print("Hva slags billetter ønsker du?")
+        groups = [
+            group[0]
+            for group in self.cursor.execute(
+                "SELECT Navn FROM Gruppe WHERE TeaterstykkeNavn = ?",
+                (play,),
+            ).fetchall()
+        ]
+        return validate_input(groups)
+
+    def book_tickets(
+        self,
+        phone: str,
+        play: str,
+        stage: str,
+        day: int,
+        month: int,
+        area: str,
+        row: int,
+        seat_numbers: list[int],
+        group: str,
+    ) -> int:
+        ticket_id = int(
+            self.cursor.execute(
+                "SELECT MAX(ID) + 1 FROM Billettkjøp"
+            ).fetchone()[0]
+        )
+        # fmt: off
+        self.insert_rows(
+            "Billettkjøp",
+            [(ticket_id, TODAY_MONTH, TODAY_DAY, phone, play, stage, month, day)],
+        )
+        self.insert_rows(
+            "Billett",
+            [(ticket_id, stage, seat, row, area, play, group) for seat in seat_numbers],
+        )
+        # fmt: on
+        return ticket_id
+
+    def calculate_price(self, ticket_id: int) -> int:
+        prices = self.cursor.execute(
             """
-            SELECT SalNavn
-            FROM Teaterstykke INNER JOIN Forestilling
-                ON Navn = TeaterstykkeNavn
-            WHERE Navn = ?
+            SELECT COUNT(StolNummer), Pris, Pris10
+            FROM Billett INNER JOIN Gruppe
+                ON (Billett.TeaterstykkeNavn = Gruppe.TeaterstykkeNavn
+                    AND GruppeNavn = Navn)
+            WHERE BillettkjøpID = ?
+            GROUP BY Pris, Pris10
             """,
-            (play,),
-        ).fetchone()[0]
+            (ticket_id,),
+        ).fetchall()
+        return sum(
+            count * (price1 if count < 10 else price10)
+            for count, price1, price10 in prices
+        )
