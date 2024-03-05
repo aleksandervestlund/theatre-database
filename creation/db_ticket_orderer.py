@@ -6,8 +6,9 @@ from creation.validators import validate_input
 
 
 def get_phone_number() -> str:
+    """Henter et gyldig norsk telefonnummeret fra brukeren."""
     print("Hva er ditt telefonnummer?")
-    while re.match(r"^(0047)?\d{8}$", phone := input("[SVAR]: ")) is None:
+    while re.fullmatch(r"(0047)?\d{8}", phone := input("[SVAR]: ")) is None:
         print("Ugyldig telefonnummer. Prøv igjen.")
     if len(phone) == 8:
         phone = "0047" + phone
@@ -152,7 +153,9 @@ class DBTicketOrderer(DBConnector):
                 """
                 SELECT Nummer
                 FROM Stol AS S1
-                WHERE SalNavn = ? AND Område = ? AND RadNummer = ?
+                WHERE SalNavn = ?
+                    AND Område = ?
+                    AND RadNummer = ?
                     AND (RadNummer, Område, Nummer) NOT IN (
                         SELECT S2.RadNummer, S2.Område, S2.Nummer
                         FROM Stol AS S2

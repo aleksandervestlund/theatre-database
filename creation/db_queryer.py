@@ -8,7 +8,7 @@ class DBQueryer(DBConnector):
         funksjonene.
         """
         while True:
-            print()
+            print("-------------------------------------------------")
             print("1: Forestillinger på gitt dato.")
             print("2: Navn på skuespillere.")
             print("3: Bestselgende forestillinger.")

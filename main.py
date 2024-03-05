@@ -8,7 +8,7 @@ from creation.validators import validate_input
 def main() -> None:
     print("Hei! Velkommen til teateret.")
     while True:
-        print()
+        print("---------------------")
         print("1: Endre database.")
         print("2: Bestill billetter.")
         print("3: SQL-spørringer.")
