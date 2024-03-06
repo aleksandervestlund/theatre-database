@@ -65,7 +65,12 @@ class DBQueryer(DBConnector):
         """
         all_dates = [
             f"{day}/{month}"
-            for month, day in self.cursor.execute("SELECT * FROM Dato")
+            for day, month in self.cursor.execute(
+                """
+                SELECT DagVises, MånedVises FROM Forestilling
+                GROUP BY DagVises, MånedVises
+                """
+            )
         ]
         print("Hvilken dato vil du se forestillinger for?")
         day, month = [

@@ -34,12 +34,12 @@ class DBTicketOrderer(DBConnector):
         stage = self.get_stage(play)
         day, month = self.get_date(play)
 
-        print("Hvor mange billetter ønsker du?")
-        while not (amount := input("[SVAR]: ")).isdigit():
-            print("Ugyldig antall. Prøv igjen.")
-        amount = int(amount)
+        groups = self.get_group(play)
+        amount = len(groups)
 
-        fitting_seats = self.get_fitting_seats(play, stage, day, month, amount)
+        fitting_seats = self.get_fitting_seats(
+            play, stage, day, month, len(groups)
+        )
         if not fitting_seats:
             print(
                 "Ingen rader med så mange tilgjengelige seter. Prøv igjen "
@@ -56,9 +56,8 @@ class DBTicketOrderer(DBConnector):
         seat_numbers = self.get_seat_numbers(
             play, stage, day, month, amount, area, row
         )
-        group = self.get_group(play)
         ticket_id = self.book_tickets(
-            phone, play, stage, day, month, area, row, seat_numbers, group
+            phone, play, stage, day, month, area, row, seat_numbers, groups
         )
         price = self.calculate_price(ticket_id)
         print(f"Takk for handelen! Prisen for alle billettene er {price} kr.")
@@ -110,6 +109,29 @@ class DBTicketOrderer(DBConnector):
             int(number) for number in validate_input(dates).split("/")
         ]
         return day, month
+
+    def get_group(self, play: str) -> list[str]:
+        all_groups = [
+            group[0]
+            for group in self.cursor.execute(
+                "SELECT Navn FROM Gruppe WHERE TeaterstykkeNavn = ?",
+                (play,),
+            ).fetchall()
+        ]
+        groups = []
+        while True:
+            print("Hva slags billetter ønsker du?")
+            group = validate_input(all_groups)
+            print("Hvor mange billetter ønsker du?")
+            while not (amount := input("[SVAR]: ")).isdigit():
+                print("Ugyldig antall. Prøv igjen.")
+            amount = int(amount)
+            groups.extend([group] * amount)
+
+            print("Ønsker du fler?")
+            if validate_input(["j", "n"]) == "n":
+                break
+        return groups
 
     def get_fitting_seats(
         self, play: str, stage: str, day: int, month: int, amount: int
@@ -175,17 +197,6 @@ class DBTicketOrderer(DBConnector):
             ).fetchall()
         ]
 
-    def get_group(self, play: str) -> str:
-        print("Hva slags billetter ønsker du?")
-        groups = [
-            group[0]
-            for group in self.cursor.execute(
-                "SELECT Navn FROM Gruppe WHERE TeaterstykkeNavn = ?",
-                (play,),
-            ).fetchall()
-        ]
-        return validate_input(groups)
-
     def book_tickets(
         self,
         phone: str,
@@ -196,7 +207,7 @@ class DBTicketOrderer(DBConnector):
         area: str,
         row: int,
         seat_numbers: list[int],
-        group: str,
+        groups: list[str],
     ) -> int:
         ticket_id = int(
             self.cursor.execute(
@@ -210,7 +221,7 @@ class DBTicketOrderer(DBConnector):
         )
         self.insert_rows(
             "Billett",
-            [(ticket_id, stage, seat, row, area, play, group) for seat in seat_numbers],
+            [(ticket_id, stage, seat, row, area, play, group) for seat, group in zip(seat_numbers, groups)],
         )
         # fmt: on
         return ticket_id
