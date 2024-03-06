@@ -21,18 +21,17 @@ OPPGAVER = [
     ("Størst av alt er kjærligheten", "Dramaturg"),
 ]
 
-# Ansattstatus, Navn, TeaterstykkeNavn, OppgaveNavn
 # fmt: off
 ANSATTE = [
-    ("Fast", "Yury Butusov", "Kongsemnene", "Regi og musikkutvelgelse"),
-    ("Fast", "Aleksandr Shishkin-Hokusai", "Kongsemnene", "Scenografi og kostymer"),
-    ("Fast", "Eivind Myren", "Kongsemnene", "Lysdesign"),
-    ("Fast", "Mina Rype Stokke", "Kongsemnene", "Dramaturg"),
-    ("Fast", "Jonas Corell Petersen", "Størst av alt er kjærligheten", "Regi"),
-    ("Fast", "David Gehrt", "Størst av alt er kjærligheten", "Scenografi og kostymer"),
-    ("Fast", "Gaute Tønder", "Størst av alt er kjærligheten", "Musikalsk ansvarlig"),
-    ("Fast", "Magnus Mikaelsen", "Størst av alt er kjærligheten", "Lysdesign"),
-    ("Fast", "Kristoffer Spender", "Størst av alt er kjærligheten", "Dramaturg"),
+    ("Fast", "", "Yury Butusov", "Kongsemnene", "Regi og musikkutvelgelse"),
+    ("Fast", "", "Aleksandr Shishkin-Hokusai", "Kongsemnene", "Scenografi og kostymer"),
+    ("Fast", "", "Eivind Myren", "Kongsemnene", "Lysdesign"),
+    ("Fast", "", "Mina Rype Stokke", "Kongsemnene", "Dramaturg"),
+    ("Fast", "", "Jonas Corell Petersen", "Størst av alt er kjærligheten", "Regi"),
+    ("Fast", "", "David Gehrt", "Størst av alt er kjærligheten", "Scenografi og kostymer"),
+    ("Fast", "", "Gaute Tønder", "Størst av alt er kjærligheten", "Musikalsk ansvarlig"),
+    ("Fast", "", "Magnus Mikaelsen", "Størst av alt er kjærligheten", "Lysdesign"),
+    ("Fast", "", "Kristoffer Spender", "Størst av alt er kjærligheten", "Dramaturg"),
 ]
 # fmt: on
 

@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS Oppgave (
 CREATE TABLE IF NOT EXISTS Ansatt (
     ID INTEGER NOT NULL,
     Ansattstatus TEXT NOT NULL,
-    EPostadresse TEXT,
-    Navn NOT NULL,
+    EPostadresse TEXT NOT NULL,
+    Navn TEXT NOT NULL,
     TeaterstykkeNavn TEXT NOT NULL,
     OppgaveNavn TEXT NOT NULL,
     PRIMARY KEY (ID),
