@@ -35,6 +35,7 @@ class DBConnector(ABC):
     def validate_has_rows(self) -> bool:
         if not self.con.execute("SELECT Navn FROM Teaterstykke").fetchall():
             print("Tabellene er tomme.")
+            input("Trykk enter for å fortsette.")
             return False
         return True
 
