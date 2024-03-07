@@ -68,6 +68,7 @@ class DBCreator(DBConnector):
 
     def clear_database(self) -> None:
         """Sletter databasen og kobler til på nytt."""
+        self.close()
         if os.path.exists(DB_FILE):
             os.remove(DB_FILE)
         self.connect()
