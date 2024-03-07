@@ -1,3 +1,4 @@
+from sqlite3 import OperationalError
 from typing import Any
 
 from creation.db_connector import DBConnector
@@ -45,17 +46,21 @@ class DBQueryer(DBConnector):
             print("5: Gå tilbake.")
             print("Hva vil du gjøre?")
 
-            match validate_input([str(i) for i in range(1, 6)]):
-                case "1":
-                    self.get_plays()
-                case "2":
-                    self.get_actors()
-                case "3":
-                    self.get_best_sellers()
-                case "4":
-                    self.get_actors_in_same_act()
-                case "5":
-                    break
+            try:
+                match validate_input([str(i) for i in range(1, 6)]):
+                    case "1":
+                        self.get_plays()
+                    case "2":
+                        self.get_actors()
+                    case "3":
+                        self.get_best_sellers()
+                    case "4":
+                        self.get_actors_in_same_act()
+                    case "5":
+                        break
+            except OperationalError:
+                print("Tabellene er ikke opprettet.")
+                break
 
             input("Trykk enter for å fortsette.")
 

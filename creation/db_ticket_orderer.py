@@ -1,4 +1,5 @@
 import re
+from sqlite3 import OperationalError
 
 from creation.config import TODAY_DAY, TODAY_MONTH
 from creation.db_connector import DBConnector
@@ -19,9 +20,13 @@ class DBTicketOrderer(DBConnector):
     def ask_user(self) -> None:
         print("+--------------------------------------------------------+")
         phone = get_phone_number()
-        name = self.cursor.execute(
-            "SELECT Navn FROM Kundeprofil WHERE Mobilnummer = ?", (phone,)
-        ).fetchone()
+        try:
+            name = self.cursor.execute(
+                "SELECT Navn FROM Kundeprofil WHERE Mobilnummer = ?", (phone,)
+            ).fetchone()
+        except OperationalError:
+            print("Tabellene er ikke opprettet.")
+            return
         if name is None:
             print("Du har ingen kundeprofil. Vil du opprette en?")
             if validate_input(["j", "n"]) == "n":
