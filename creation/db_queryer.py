@@ -58,7 +58,7 @@ class DBQueryer(DBConnector):
                 case "4":
                     self.get_actors_in_same_act()
                 case "5":
-                    break
+                    return
 
             input("Trykk enter for å fortsette.")
 
@@ -67,6 +67,7 @@ class DBQueryer(DBConnector):
         datoen.
         """
         if not self.validate_has_rows():
+            input("Trykk enter for å fortsette.")
             return
 
         all_dates = [
@@ -148,6 +149,7 @@ class DBQueryer(DBConnector):
 
     def get_actors_in_same_act(self) -> None:
         if not self.validate_has_rows():
+            input("Trykk enter for å fortsette.")
             return
 
         all_actors = [
