@@ -141,6 +141,10 @@ class DBQueryer(DBConnector):
                 Forestilling.TeaterstykkeNavn ASC, Forestilling.DagVises ASC
             """
         ).fetchall()
+        if not rows:
+            print("Ingen forestillinger er solgt.")
+            return
+
         pretty_print(
             ["Teaterstykke", "Dag", "Måned", "Solgte billetter"], rows
         )
