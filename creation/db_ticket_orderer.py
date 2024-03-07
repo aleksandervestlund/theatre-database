@@ -1,5 +1,4 @@
 import re
-from sqlite3 import OperationalError
 
 from creation.config import TODAY_DAY, TODAY_MONTH
 from creation.db_connector import DBConnector

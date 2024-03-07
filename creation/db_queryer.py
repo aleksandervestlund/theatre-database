@@ -1,4 +1,3 @@
-from sqlite3 import OperationalError
 from typing import Any
 
 from creation.db_connector import DBConnector

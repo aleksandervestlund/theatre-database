@@ -1,9 +1,8 @@
 import sqlite3
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
+from sqlite3 import OperationalError
 from typing import Any
-
-from psycopg2 import OperationalError
 
 from creation.config import DB_FILE, TABLES
 from creation.validators import validate_attribute_names, validate_table_name
