@@ -72,7 +72,7 @@ class DBTicketOrderer(DBConnector):
         input("Trykk enter for å fortsette.")
 
     def validate_has_tickets(self) -> bool:
-        if not self.con.execute("SELECT ID FROM Billett").fetchall():
+        if not self.con.execute("SELECT ID FROM Billettkjøp").fetchall():
             print("Forhåndsbestillinger må leses.")
             input("Trykk enter for å fortsette.")
             return False
