@@ -4,7 +4,7 @@ from creation.db_connector import DBConnector
 from creation.validators import validate_input
 
 
-def pretty_print(attributes: list[str], rows: list[tuple[Any]]) -> None:
+def pretty_print(attributes: list[str], rows: list[tuple[Any, ...]]) -> None:
     """Printer ut en tabell med attributter og rader. Hver rad må ha
     like mange elementer som det er attributter.
 
@@ -67,7 +67,6 @@ class DBQueryer(DBConnector):
         datoen.
         """
         if not self.validate_has_rows():
-            input("Trykk enter for å fortsette.")
             return
 
         all_dates = [
@@ -149,7 +148,6 @@ class DBQueryer(DBConnector):
 
     def get_actors_in_same_act(self) -> None:
         if not self.validate_has_rows():
-            input("Trykk enter for å fortsette.")
             return
 
         all_actors = [

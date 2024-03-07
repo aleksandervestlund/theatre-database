@@ -21,6 +21,7 @@ class DBTicketOrderer(DBConnector):
         if not self.validate_connection():
             return
         if not self.validate_has_rows():
+            input("Trykk enter for å fortsette.")
             return
 
         phone = get_phone_number()
