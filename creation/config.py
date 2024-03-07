@@ -1,10 +1,11 @@
+import os
 import pathlib
 
 root = pathlib.Path(__file__).parent.parent.resolve()
-DB_FILE = f"{root}/teater.db"
-SQL_FILE = f"{root}/creation/schema.sql"
-HOVEDSCENE_FILE = f"{root}/reservations/hovedscenen"
-GAMLE_SCENE_FILE = f"{root}/reservations/gamle-scene"
+DB_FILE = os.path.join(root, "teater.db")
+SQL_FILE = os.path.join(root, "creation", "schema.sql")
+HOVEDSCENE_FILE = os.path.join(root, "reservations", "hovedscenen")
+GAMLE_SCENE_FILE = os.path.join(root, "reservations", "gamle-scene")
 
 TODAY_MONTH = 1
 TODAY_DAY = 15
