@@ -37,6 +37,9 @@ def pretty_print(attributes: list[str], rows: list[tuple[Any]]) -> None:
 
 class DBQueryer(DBConnector):
     def ask_user(self) -> None:
+        if not self.validate_connection():
+            return
+
         while True:
             print("+--------------------------------------------------------+")
             print("1: Forestillinger på gitt dato.")
@@ -46,21 +49,17 @@ class DBQueryer(DBConnector):
             print("5: Gå tilbake.")
             print("Hva vil du gjøre?")
 
-            try:
-                match validate_input([str(i) for i in range(1, 6)]):
-                    case "1":
-                        self.get_plays()
-                    case "2":
-                        self.get_actors()
-                    case "3":
-                        self.get_best_sellers()
-                    case "4":
-                        self.get_actors_in_same_act()
-                    case "5":
-                        break
-            except OperationalError:
-                print("Tabellene er ikke opprettet.")
-                break
+            match validate_input([str(i) for i in range(1, 6)]):
+                case "1":
+                    self.get_plays()
+                case "2":
+                    self.get_actors()
+                case "3":
+                    self.get_best_sellers()
+                case "4":
+                    self.get_actors_in_same_act()
+                case "5":
+                    break
 
             input("Trykk enter for å fortsette.")
 

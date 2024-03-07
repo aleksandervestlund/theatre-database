@@ -3,6 +3,8 @@ from abc import ABC, abstractmethod
 from collections.abc import Iterable
 from typing import Any
 
+from psycopg2 import OperationalError
+
 from creation.config import DB_FILE, TABLES
 from creation.validators import validate_attribute_names, validate_table_name
 
@@ -21,6 +23,14 @@ class DBConnector(ABC):
         self.con = sqlite3.connect(DB_FILE)
         self.con.execute("PRAGMA foreign_keys = ON")
         self.cursor = self.con.cursor()
+
+    def validate_connection(self) -> bool:
+        try:
+            self.con.execute("SELECT Mobilnummer FROM Kundeprofil")
+        except OperationalError:
+            print("Tabellene er ikke opprettet.")
+            return False
+        return True
 
     def print_table(self, table: str) -> None:
         validate_table_name(table)

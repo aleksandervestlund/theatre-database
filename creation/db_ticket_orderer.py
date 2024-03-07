@@ -19,14 +19,16 @@ def get_phone_number() -> str:
 class DBTicketOrderer(DBConnector):
     def ask_user(self) -> None:
         print("+--------------------------------------------------------+")
-        phone = get_phone_number()
-        try:
-            name = self.cursor.execute(
-                "SELECT Navn FROM Kundeprofil WHERE Mobilnummer = ?", (phone,)
-            ).fetchone()
-        except OperationalError:
-            print("Tabellene er ikke opprettet.")
+        if not self.validate_connection():
             return
+        if not self.validate_has_rows():
+            print("Ingen forestillinger er lagt til i databasen.")
+            return
+
+        phone = get_phone_number()
+        name = self.cursor.execute(
+            "SELECT Navn FROM Kundeprofil WHERE Mobilnummer = ?", (phone,)
+        ).fetchone()
         if name is None:
             print("Du har ingen kundeprofil. Vil du opprette en?")
             if validate_input(["j", "n"]) == "n":
@@ -68,6 +70,10 @@ class DBTicketOrderer(DBConnector):
         price = self.calculate_price(ticket_id)
         print(f"Takk for handelen! Prisen for alle billettene er {price} kr.")
         input("Trykk enter for å fortsette.")
+
+    def validate_has_rows(self) -> bool:
+        rows = self.con.execute("SELECT Navn FROM Teaterstykke").fetchall()
+        return len(rows) > 0
 
     def create_user(self, phone: str) -> None:
         print("Hva er ditt navn?")
