@@ -21,8 +21,6 @@ class DBTicketOrderer(DBConnector):
         if not self.validate_connection():
             return
         if not self.validate_has_rows():
-            print("Ingen rader er lagt til i databasen.")
-            input("Trykk enter for å fortsette.")
             return
 
         phone = get_phone_number()
@@ -70,10 +68,6 @@ class DBTicketOrderer(DBConnector):
         price = self.calculate_price(ticket_id)
         print(f"Takk for handelen! Prisen for alle billettene er {price} kr.")
         input("Trykk enter for å fortsette.")
-
-    def validate_has_rows(self) -> bool:
-        rows = self.con.execute("SELECT Navn FROM Teaterstykke").fetchall()
-        return len(rows) > 0
 
     def create_user(self, phone: str) -> None:
         print("Hva er ditt navn?")

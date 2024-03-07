@@ -66,6 +66,9 @@ class DBQueryer(DBConnector):
         """Spør brukeren om en dato og printer ut forestillinger for den
         datoen.
         """
+        if not self.validate_has_rows():
+            return
+
         all_dates = [
             f"{day}/{month}"
             for day, month in self.cursor.execute(
@@ -144,6 +147,9 @@ class DBQueryer(DBConnector):
         )
 
     def get_actors_in_same_act(self) -> None:
+        if not self.validate_has_rows():
+            return
+
         all_actors = [
             actor[0]
             for actor in self.cursor.execute(
