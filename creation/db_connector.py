@@ -28,6 +28,7 @@ class DBConnector(ABC):
             self.con.execute("SELECT Mobilnummer FROM Kundeprofil")
         except OperationalError:
             print("Tabellene er ikke opprettet.")
+            input("Trykk enter for å fortsette.")
             return False
         return True
 
