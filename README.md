@@ -11,7 +11,7 @@ Sørg for at du har lastet ned:
 ## Starting av applikasjonen
 
 ```bash
-$ python3 main.py
+$ python main.py
 ```
 
 ### Valgmuligheter

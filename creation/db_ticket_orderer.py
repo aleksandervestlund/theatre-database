@@ -17,6 +17,7 @@ def get_phone_number() -> str:
 
 class DBTicketOrderer(DBConnector):
     def ask_user(self) -> None:
+        print("+--------------------------------------------------------+")
         phone = get_phone_number()
         name = self.cursor.execute(
             "SELECT Navn FROM Kundeprofil WHERE Mobilnummer = ?", (phone,)

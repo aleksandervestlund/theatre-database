@@ -25,11 +25,11 @@ def validate_attribute_names(attribute_names: Iterable[str]) -> None:
             raise OperationalError(f"Ugyldig attributtnavn: {attribute}.")
 
 
-def validate_input(legal_answers: Iterable[str]) -> str:
+def validate_input(legal_answers: list[str]) -> str:
     """Tar inn input fra brukeren og sjekker at det er gyldig.
     Case-sensitivt.
 
-    :param Iterable[str] legal_answers: Lovlige input-verdier
+    :param list[str] legal_answers: Lovlige input-verdier
     """
     print(f"Mulige svar: {', '.join(legal_answers)}")
     while (answer := input("[SVAR]: ")) not in legal_answers:

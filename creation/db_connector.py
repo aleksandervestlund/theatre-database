@@ -1,4 +1,5 @@
 import sqlite3
+from abc import ABC, abstractmethod
 from collections.abc import Iterable
 from typing import Any
 
@@ -6,9 +7,15 @@ from creation.config import DB_FILE, TABLES
 from creation.validators import validate_attribute_names, validate_table_name
 
 
-class DBConnector:
+class DBConnector(ABC):
     def __init__(self) -> None:
         self.connect()
+
+    @abstractmethod
+    def ask_user(self) -> None:
+        """Spør brukeren hva de vil gjøre og kjører de tilhørende
+        funksjonene.
+        """
 
     def connect(self) -> None:
         self.con = sqlite3.connect(DB_FILE)
@@ -61,14 +68,9 @@ class DBConnector:
         for row in rows:
             self.cursor.execute(command, row)
 
-    def close(self, commit: bool = True) -> None:
-        """Lukker tilkoblingen til databasen. Må kjøres til slutt.
-
-        :param bool commit: Om endringene på radene skal lagres,
-        defaulter til True
-        """
+    def close(self) -> None:
+        """Lukker tilkoblingen til databasen. Må kjøres til slutt."""
         self.con.execute("PRAGMA analysis_limit=1000")
         self.con.execute("PRAGMA optimize")
-        if commit:
-            self.con.commit()
+        self.con.commit()
         self.con.close()

@@ -1,5 +1,10 @@
-DB_FILE = "teater.db"
-SQL_FILE = "creation/schema.sql"
+import pathlib
+
+root = pathlib.Path(__file__).parent.parent.resolve()
+DB_FILE = f"{root}/teater.db"
+SQL_FILE = f"{root}/creation/schema.sql"
+HOVEDSCENE_FILE = f"{root}/reservations/hovedscenen"
+GAMLE_SCENE_FILE = f"{root}/reservations/gamle-scene"
 
 TODAY_MONTH = 1
 TODAY_DAY = 15

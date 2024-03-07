@@ -1,4 +1,3 @@
-from creation.db_connector import DBConnector
 from creation.db_creator import DBCreator
 from creation.db_queryer import DBQueryer
 from creation.db_ticket_orderer import DBTicketOrderer
@@ -6,9 +5,11 @@ from creation.validators import validate_input
 
 
 def main() -> None:
-    print("Hei! Velkommen til teateret.")
     while True:
-        print("---------------------")
+        print("+--------------------------------------------------------+")
+        print("|             Velkommen til Trøndelag Teater             |")
+        print("+--------------------------------------------------------+")
+
         print("1: Endre database.")
         print("2: Bestill billetter.")
         print("3: SQL-spørringer.")
@@ -19,21 +20,17 @@ def main() -> None:
             case "1":
                 dbc = DBCreator()
                 dbc.ask_user()
-                dbc.close(True)
+                dbc.close()
             case "2":
                 dbtc = DBTicketOrderer()
                 dbtc.ask_user()
-                dbtc.close(True)
+                dbtc.close()
             case "3":
                 dbq = DBQueryer()
                 dbq.ask_user()
-                dbq.close(True)
+                dbq.close()
             case "4":
                 break
-
-    dbc2 = DBConnector()
-    dbc2.print_all_tables()
-    dbc2.close(False)
 
 
 if __name__ == "__main__":

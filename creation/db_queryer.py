@@ -1,14 +1,43 @@
+from typing import Any
+
 from creation.db_connector import DBConnector
 from creation.validators import validate_input
 
 
+def pretty_print(attributes: list[str], rows: list[tuple[Any]]) -> None:
+    """Printer ut en tabell med attributter og rader. Hver rad må ha
+    like mange elementer som det er attributter.
+
+    :param list[str] attributes: Attributtene som skal stå over
+    tabellen
+    :param list[tuple] rows: Radene som skal printes ut
+    """
+    max_lengths = [len(attribute) for attribute in attributes]
+    for i in range(len(rows[0])):
+        for row in rows:
+            max_lengths[i] = max(max_lengths[i], len(str(row[i])))
+
+    separator = "+"
+    for length in max_lengths:
+        separator += f"{'-' * (length + 2)}+"
+
+    print(separator)
+    for i, attribute in enumerate(attributes):
+        print(f"| {attribute:<{max_lengths[i]}}", end=" ")
+    print("|")
+    print(separator)
+
+    for row in rows:
+        for i, value in enumerate(row):
+            print(f"| {value:<{max_lengths[i]}}", end=" ")
+        print("|")
+    print(separator)
+
+
 class DBQueryer(DBConnector):
     def ask_user(self) -> None:
-        """Spør brukeren hva de vil gjøre og kjører de tilhørende
-        funksjonene.
-        """
         while True:
-            print("-------------------------------------------------")
+            print("+--------------------------------------------------------+")
             print("1: Forestillinger på gitt dato.")
             print("2: Navn på skuespillere.")
             print("3: Bestselgende forestillinger.")
@@ -30,35 +59,6 @@ class DBQueryer(DBConnector):
 
             input("Trykk enter for å fortsette.")
 
-    def pretty_print(self, attributes: list[str], rows: list[tuple]) -> None:
-        """Printer ut en tabell med attributter og rader. Hver rad må ha
-        like mange elementer som det er attributter.
-
-        :param list[str] attributes: Attributtene som skal stå over
-        tabellen
-        :param list[tuple] rows: Radene som skal printes ut
-        """
-        max_lengths = [len(attribute) for attribute in attributes]
-        for i in range(len(rows[0])):
-            for row in rows:
-                max_lengths[i] = max(max_lengths[i], len(str(row[i])))
-
-        separator = "+"
-        for length in max_lengths:
-            separator += f"{'-' * (length + 2)}+"
-
-        print(separator)
-        for i, attribute in enumerate(attributes):
-            print(f"| {attribute:<{max_lengths[i]}}", end=" ")
-        print("|")
-        print(separator)
-
-        for row in rows:
-            for i, value in enumerate(row):
-                print(f"| {value:<{max_lengths[i]}}", end=" ")
-            print("|")
-        print(separator)
-
     def get_plays(self) -> None:
         """Spør brukeren om en dato og printer ut forestillinger for den
         datoen.
@@ -69,6 +69,7 @@ class DBQueryer(DBConnector):
                 """
                 SELECT DagVises, MånedVises FROM Forestilling
                 GROUP BY DagVises, MånedVises
+                ORDER BY MånedVises ASC, DagVises ASC
                 """
             )
         ]
@@ -90,13 +91,14 @@ class DBQueryer(DBConnector):
                     ON Billettkjøp.ID = Billett.BillettkjøpID
             WHERE Forestilling.DagVises = ? AND Forestilling.MånedVises = ?
             GROUP BY Forestilling.TeaterstykkeNavn, Forestilling.SalNavn
+            ORDER BY Forestilling.TeaterstykkeNavn ASC
             """,
             (day, month),
         ).fetchall()
-        self.pretty_print(["TeaterstykkeNavn", "SalNavn", "Antall"], rows)
+        pretty_print(["TeaterstykkeNavn", "SalNavn", "Antall"], rows)
 
     def get_actors(self) -> None:
-        """Printer ut skuespillere og hvilke roller de har."""
+        """Printer ut skuespillerene og hvilke roller de har."""
         rows = self.cursor.execute(
             """
             SELECT Akt.TeaterstykkeNavn, Skuespiller.Navn,
@@ -108,10 +110,11 @@ class DBQueryer(DBConnector):
                 INNER JOIN Skuespiller
                     ON SpillerRolle.SkuespillerID = Skuespiller.ID
             GROUP BY SpillerRolle.RolleNavn
-            ORDER BY Akt.TeaterstykkeNavn ASC, Skuespiller.Navn ASC
+            ORDER BY Akt.TeaterstykkeNavn ASC, Skuespiller.Navn ASC,
+                SpillerRolle.RolleNavn ASC
             """
         ).fetchall()
-        self.pretty_print(["TeaterstykkeNavn", "Navn", "RolleNavn"], rows)
+        pretty_print(["TeaterstykkeNavn", "Navn", "RolleNavn"], rows)
 
     def get_best_sellers(self) -> None:
         """Printer ut forestillinger og hvor mange billetter som er
@@ -129,10 +132,11 @@ class DBQueryer(DBConnector):
                 INNER JOIN Billett ON Billettkjøp.ID = Billett.BillettkjøpID
             GROUP BY Forestilling.TeaterstykkeNavn, Forestilling.DagVises,
                 Forestilling.MånedVises
-            ORDER BY Antall DESC
+            ORDER BY Antall DESC, Forestilling.MånedVises ASC,
+                Forestilling.TeaterstykkeNavn ASC, Forestilling.DagVises ASC
             """
         ).fetchall()
-        self.pretty_print(
+        pretty_print(
             ["Teaterstykke", "Dag", "Måned", "Solgte billetter"], rows
         )
 
@@ -159,7 +163,8 @@ class DBQueryer(DBConnector):
                 AND DI1.TeaterstykkeNavn = DI2.TeaterstykkeNavn
                 AND DI1.AktNummer = DI2.AktNummer
             GROUP BY S1.Navn, S2.Navn
+            ORDER BY S2.Navn ASC, DI1.TeaterstykkeNavn ASC
             """,
             (name,),
         ).fetchall()
-        self.pretty_print(["Skuespiller", "Skuespiller", "Teaterstykke"], rows)
+        pretty_print(["Skuespiller", "Skuespiller", "Teaterstykke"], rows)
