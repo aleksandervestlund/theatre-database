@@ -17,7 +17,6 @@ def get_phone_number() -> str:
 
 class DBTicketOrderer(DBConnector):
     def ask_user(self) -> None:
-        clear_terminal()
         if not self.validate_tables():
             return
         if not self.validate_rows():
@@ -25,6 +24,7 @@ class DBTicketOrderer(DBConnector):
         if not self.validate_tickets():
             return
 
+        clear_terminal()
         print("+--------------------------------------------------------+")
         print("|                   Bestill billetter                    |")
         print("+--------------------------------------------------------+")
