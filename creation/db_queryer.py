@@ -44,6 +44,10 @@ class DBQueryer(DBConnector):
 
         while True:
             clear_terminal()
+            print("+--------------------------------------------------------+")
+            print("|                     SQL-spørringer                     |")
+            print("+--------------------------------------------------------+")
+
             print("1: Forestillinger på gitt dato.")
             print("2: Navn på skuespillere.")
             print("3: Bestselgende forestillinger.")

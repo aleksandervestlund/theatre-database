@@ -31,6 +31,10 @@ class DBCreator(DBConnector):
     def ask_user(self) -> None:
         while True:
             clear_terminal()
+            print("+--------------------------------------------------------+")
+            print("|                    Endre databasen                     |")
+            print("+--------------------------------------------------------+")
+
             print("1: Tøm databasen.")
             print("2: Fyll databasen med tabeller.")
             print("3: Fyll databasen med forhåndsbestemte rader.")
@@ -97,7 +101,7 @@ class DBCreator(DBConnector):
         # fmt: on
         for i, info in enumerate(info_list, 1):
             play, filename, chairs = info
-            scene = " ".join(filename.split("/")[-1].split("-")).title()
+            scene = " ".join(filename.split(os.sep)[-1].split("-")).title()
             with open(f"{filename}.txt", encoding="utf-8") as file:
                 month, day = [
                     int(number) for number in file.readline().split("-")[1:]

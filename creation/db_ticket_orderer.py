@@ -25,6 +25,10 @@ class DBTicketOrderer(DBConnector):
         if not self.validate_tickets():
             return
 
+        print("+--------------------------------------------------------+")
+        print("|                   Bestill billetter                    |")
+        print("+--------------------------------------------------------+")
+
         phone = get_phone_number()
         name = self.cursor.execute(
             "SELECT Navn FROM Kundeprofil WHERE Mobilnummer = ?", (phone,)
