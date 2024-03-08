@@ -18,11 +18,11 @@ def get_phone_number() -> str:
 class DBTicketOrderer(DBConnector):
     def ask_user(self) -> None:
         print("+--------------------------------------------------------+")
-        if not self.validate_connection():
+        if not self.validate_tables():
             return
-        if not self.validate_has_rows():
+        if not self.validate_rows():
             return
-        if not self.validate_has_tickets():
+        if not self.validate_tickets():
             return
 
         phone = get_phone_number()
@@ -71,7 +71,7 @@ class DBTicketOrderer(DBConnector):
         print(f"Takk for handelen! Prisen for alle billettene er {price} kr.")
         input("Trykk enter for å fortsette.")
 
-    def validate_has_tickets(self) -> bool:
+    def validate_tickets(self) -> bool:
         if not self.con.execute("SELECT ID FROM Billettkjøp").fetchall():
             print("Forhåndsbestillinger må leses.")
             input("Trykk enter for å fortsette.")
@@ -224,11 +224,9 @@ class DBTicketOrderer(DBConnector):
         seat_numbers: list[int],
         groups: list[str],
     ) -> int:
-        ticket_id = int(
-            self.cursor.execute(
-                "SELECT MAX(ID) + 1 FROM Billettkjøp"
-            ).fetchone()[0]
-        )
+        ticket_id = self.cursor.execute(
+            "SELECT MAX(ID) + 1 FROM Billettkjøp"
+        ).fetchone()[0]
 
         # fmt: off
         self.insert_rows(

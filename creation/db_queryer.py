@@ -1,3 +1,4 @@
+import os
 from typing import Any
 
 from creation.db_connector import DBConnector
@@ -36,13 +37,13 @@ def pretty_print(attributes: list[str], rows: list[tuple[Any, ...]]) -> None:
 
 class DBQueryer(DBConnector):
     def ask_user(self) -> None:
-        if not self.validate_connection():
+        if not self.validate_tables():
             return
-        if not self.validate_has_rows():
+        if not self.validate_rows():
             return
 
         while True:
-            print("+--------------------------------------------------------+")
+            os.system("clear")
             print("1: Forestillinger på gitt dato.")
             print("2: Navn på skuespillere.")
             print("3: Bestselgende forestillinger.")

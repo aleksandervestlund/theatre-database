@@ -1,5 +1,6 @@
 import os
 import pathlib
+import random
 
 root = pathlib.Path(__file__).parent.parent.resolve()
 DB_FILE = os.path.join(root, "teater.db")
@@ -8,7 +9,7 @@ HOVEDSCENE_FILE = os.path.join(root, "reservations", "hovedscenen")
 GAMLE_SCENE_FILE = os.path.join(root, "reservations", "gamle-scene")
 
 TODAY_MONTH = 1
-TODAY_DAY = 15
+TODAY_DAY = random.randint(2, 31)
 
 TEATERSTYKKER = [
     ("Kongsemnene", "Henrik Ibsen", "19.00"),

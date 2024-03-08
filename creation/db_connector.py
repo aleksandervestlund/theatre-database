@@ -23,7 +23,7 @@ class DBConnector(ABC):
         self.con.execute("PRAGMA foreign_keys = ON")
         self.cursor = self.con.cursor()
 
-    def validate_connection(self) -> bool:
+    def validate_tables(self) -> bool:
         try:
             self.con.execute("SELECT Mobilnummer FROM Kundeprofil")
         except OperationalError:
@@ -32,7 +32,7 @@ class DBConnector(ABC):
             return False
         return True
 
-    def validate_has_rows(self) -> bool:
+    def validate_rows(self) -> bool:
         if not self.con.execute("SELECT Navn FROM Teaterstykke").fetchall():
             print("Tabellene er tomme.")
             input("Trykk enter for å fortsette.")

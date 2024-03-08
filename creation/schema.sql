@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS Oppgave (
     PRIMARY KEY (TeaterstykkeNavn, Navn),
     FOREIGN KEY (TeaterstykkeNavn)
         REFERENCES Teaterstykke (Navn)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Ansatt (
@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS Ansatt (
     PRIMARY KEY (ID),
     FOREIGN KEY (TeaterstykkeNavn, OppgaveNavn)
         REFERENCES Oppgave (TeaterstykkeNavn, Navn)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Akt (
@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS Akt (
     PRIMARY KEY (TeaterstykkeNavn, Nummer),
     FOREIGN KEY (TeaterstykkeNavn)
         REFERENCES Teaterstykke (Navn)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Rolle (
@@ -52,12 +52,12 @@ CREATE TABLE IF NOT EXISTS DeltarI (
     PRIMARY KEY (RolleNavn, TeaterstykkeNavn, AktNummer),
     FOREIGN KEY (RolleNavn)
         REFERENCES Rolle (Navn)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION,
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE,
     FOREIGN KEY (TeaterstykkeNavn, AktNummer)
         REFERENCES Akt (TeaterstykkeNavn, Nummer)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Skuespiller (
@@ -72,12 +72,12 @@ CREATE TABLE IF NOT EXISTS SpillerRolle (
     PRIMARY KEY (SkuespillerID, RolleNavn),
     FOREIGN KEY (SkuespillerID)
         REFERENCES Skuespiller (ID)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION,
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE,
     FOREIGN KEY (RolleNavn)
         REFERENCES Rolle (Navn)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Dato (
@@ -99,8 +99,8 @@ CREATE TABLE IF NOT EXISTS Stol (
     PRIMARY KEY (SalNavn, Nummer, RadNummer, Område),
     FOREIGN KEY (SalNavn)
         REFERENCES Sal (Navn)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Forestilling (
@@ -111,16 +111,16 @@ CREATE TABLE IF NOT EXISTS Forestilling (
     PRIMARY KEY (TeaterstykkeNavn, SalNavn, MånedVises, DagVises),
     FOREIGN KEY (TeaterstykkeNavn)
         REFERENCES Teaterstykke (Navn)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION,
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE,
     FOREIGN KEY (SalNavn)
         REFERENCES Sal (Navn)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION,
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE,
     FOREIGN KEY (MånedVises, DagVises)
         REFERENCES Dato (Måned, Dag)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Kundeprofil (
@@ -142,16 +142,16 @@ CREATE TABLE IF NOT EXISTS Billettkjøp (
     PRIMARY KEY (ID),
     FOREIGN KEY (MånedKjøpt, DagKjøpt)
         REFERENCES Dato (Måned, Dag)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION,
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE,
     FOREIGN KEY (KundeprofilMobilnummer)
         REFERENCES Kundeprofil (Mobilnummer)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION,
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE,
     FOREIGN KEY (TeaterstykkeNavn, SalNavn, MånedVises, DagVises)
         REFERENCES Forestilling (TeaterstykkeNavn, SalNavn, MånedVises, DagVises)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Gruppe (
@@ -162,8 +162,8 @@ CREATE TABLE IF NOT EXISTS Gruppe (
     PRIMARY KEY (TeaterstykkeNavn, Navn),
     FOREIGN KEY (TeaterstykkeNavn)
         REFERENCES Teaterstykke (Navn)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Billett (
@@ -177,14 +177,14 @@ CREATE TABLE IF NOT EXISTS Billett (
     PRIMARY KEY (BillettkjøpID, SalNavn, StolNummer, RadNummer, Område, TeaterstykkeNavn, GruppeNavn),
     FOREIGN KEY (BillettkjøpID)
         REFERENCES Billettkjøp (ID)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION,
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE,
     FOREIGN KEY (SalNavn, StolNummer, RadNummer, Område)
         REFERENCES Stol (SalNavn, Nummer, RadNummer, Område)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION,
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE,
     FOREIGN KEY (TeaterstykkeNavn, GruppeNavn)
         REFERENCES Gruppe (TeaterstykkeNavn, Navn)
-            ON DELETE CASCADE
-            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE
 );

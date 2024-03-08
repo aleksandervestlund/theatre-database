@@ -1,3 +1,5 @@
+import os
+
 from creation.db_creator import DBCreator
 from creation.db_queryer import DBQueryer
 from creation.db_ticket_orderer import DBTicketOrderer
@@ -6,6 +8,7 @@ from creation.validators import validate_input
 
 def main() -> None:
     while True:
+        os.system("clear")
         print("+--------------------------------------------------------+")
         print("|             Velkommen til Trøndelag Teater             |")
         print("+--------------------------------------------------------+")

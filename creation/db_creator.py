@@ -30,7 +30,7 @@ from creation.validators import validate_input
 class DBCreator(DBConnector):
     def ask_user(self) -> None:
         while True:
-            print("+--------------------------------------------------------+")
+            os.system("clear")
             print("1: Tøm databasen.")
             print("2: Fyll databasen med tabeller.")
             print("3: Fyll databasen med forhåndsbestemte rader.")
@@ -44,6 +44,8 @@ class DBCreator(DBConnector):
                 case "2":
                     self.create_tables()
                 case "3":
+                    if not self.validate_tables():
+                        continue
                     try:
                         self.fill_tables()
                     except IntegrityError:
@@ -53,6 +55,10 @@ class DBCreator(DBConnector):
                         print("Tabellene er ikke opprettet.")
                         continue
                 case "4":
+                    if not self.validate_tables():
+                        continue
+                    if not self.validate_rows():
+                        continue
                     try:
                         self.book_reserved_seats()
                     except IntegrityError:
@@ -65,6 +71,7 @@ class DBCreator(DBConnector):
                     return
 
             print("Suksess!")
+            input("Trykk enter for å fortsette.")
 
     def clear_database(self) -> None:
         """Sletter databasen og kobler til på nytt."""
