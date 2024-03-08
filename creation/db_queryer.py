@@ -1,4 +1,3 @@
-import os
 from typing import Any
 
 from creation.db_connector import DBConnector
@@ -13,14 +12,16 @@ def pretty_print(attributes: list[str], rows: list[tuple[Any, ...]]) -> None:
     tabellen
     :param list[tuple] rows: Radene som skal printes ut
     """
+    if not rows:
+        print("Ingen resultater.")
+        return
+
     max_lengths = [len(attribute) for attribute in attributes]
     for i in range(len(rows[0])):
         for row in rows:
             max_lengths[i] = max(max_lengths[i], len(str(row[i])))
 
-    separator = "+"
-    for length in max_lengths:
-        separator += f"{'-' * (length + 2)}+"
+    separator = f"+{'+'.join('-' * (length + 2) for length in max_lengths)}+"
 
     print(separator)
     for i, attribute in enumerate(attributes):
@@ -146,10 +147,6 @@ class DBQueryer(DBConnector):
                 Forestilling.TeaterstykkeNavn ASC, Forestilling.DagVises ASC
             """
         ).fetchall()
-        if not rows:
-            print("Ingen forestillinger er solgt.")
-            return
-
         pretty_print(
             ["Teaterstykke", "Dag", "Måned", "Solgte billetter"], rows
         )

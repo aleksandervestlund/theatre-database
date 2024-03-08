@@ -78,6 +78,7 @@ ROLLER = [
     ("Åsmund Flaten",),
 ]
 
+# Hentet fra: https://www.ibsen.uio.no/DRVIT_KE%7CKEht.xhtml
 # fmt: off
 DELTAR_I = []
 DELTAR_I.extend([("Haakon Haakonssønn", "Kongsemnene", i) for i in range(1, 6)])
