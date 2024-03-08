@@ -2,7 +2,7 @@ import re
 
 from creation.config import TODAY_DAY, TODAY_MONTH
 from creation.db_connector import DBConnector
-from creation.validators import validate_input
+from creation.helpers import clear_terminal, validate_input
 
 
 def get_phone_number() -> str:
@@ -17,7 +17,7 @@ def get_phone_number() -> str:
 
 class DBTicketOrderer(DBConnector):
     def ask_user(self) -> None:
-        print("+--------------------------------------------------------+")
+        clear_terminal()
         if not self.validate_tables():
             return
         if not self.validate_rows():

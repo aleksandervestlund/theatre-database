@@ -1,3 +1,4 @@
+import os
 from collections.abc import Iterable
 from sqlite3 import OperationalError
 
@@ -35,3 +36,8 @@ def validate_input(legal_answers: list[str]) -> str:
     while (answer := input("[SVAR]: ")) not in legal_answers:
         print("Ugyldig input. Prøv igjen.")
     return answer
+
+
+def clear_terminal() -> None:
+    """Tømmer terminalen."""
+    os.system("cls" if os.name == "nt" else "clear")

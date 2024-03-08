@@ -2,7 +2,7 @@ import os
 from typing import Any
 
 from creation.db_connector import DBConnector
-from creation.validators import validate_input
+from creation.helpers import clear_terminal, validate_input
 
 
 def pretty_print(attributes: list[str], rows: list[tuple[Any, ...]]) -> None:
@@ -43,7 +43,7 @@ class DBQueryer(DBConnector):
             return
 
         while True:
-            os.system("clear")
+            clear_terminal()
             print("1: Forestillinger på gitt dato.")
             print("2: Navn på skuespillere.")
             print("3: Bestselgende forestillinger.")

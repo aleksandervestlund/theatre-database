@@ -3,12 +3,12 @@ import os
 from creation.db_creator import DBCreator
 from creation.db_queryer import DBQueryer
 from creation.db_ticket_orderer import DBTicketOrderer
-from creation.validators import validate_input
+from creation.helpers import clear_terminal, validate_input
 
 
 def main() -> None:
     while True:
-        os.system("clear")
+        clear_terminal()
         print("+--------------------------------------------------------+")
         print("|             Velkommen til Trøndelag Teater             |")
         print("+--------------------------------------------------------+")
