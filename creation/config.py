@@ -2,11 +2,11 @@ import os
 import random
 from pathlib import Path
 
-root = Path(__file__).parent.parent.resolve()
-DB_FILE = os.path.join(root, "teater.db")
-SQL_FILE = os.path.join(root, "creation", "schema.sql")
-HOVEDSCENE_FILE = os.path.join(root, "reservations", "hovedscenen")
-GAMLE_SCENE_FILE = os.path.join(root, "reservations", "gamle-scene")
+__root = Path(__file__).parent.parent.resolve()
+DB_FILE = os.path.join(__root, "teater.db")
+SQL_FILE = os.path.join(__root, "creation", "schema.sql")
+HOVEDSCENE_FILE = os.path.join(__root, "reservations", "hovedscenen")
+GAMLE_SCENE_FILE = os.path.join(__root, "reservations", "gamle-scene")
 
 TODAY_MONTH = 1
 TODAY_DAY = random.randint(2, 31)
