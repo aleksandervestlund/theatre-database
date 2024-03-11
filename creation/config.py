@@ -1,8 +1,8 @@
 import os
-import pathlib
 import random
+from pathlib import Path
 
-root = pathlib.Path(__file__).parent.parent.resolve()
+root = Path(__file__).parent.parent.resolve()
 DB_FILE = os.path.join(root, "teater.db")
 SQL_FILE = os.path.join(root, "creation", "schema.sql")
 HOVEDSCENE_FILE = os.path.join(root, "reservations", "hovedscenen")

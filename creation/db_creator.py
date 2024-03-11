@@ -54,9 +54,11 @@ class DBCreator(DBConnector):
                         self.fill_tables()
                     except IntegrityError:
                         print("Tabellene er allerede fylt.")
+                        input("Trykk enter for å fortsette.")
                         continue
                     except OperationalError:
                         print("Tabellene er ikke opprettet.")
+                        input("Trykk enter for å fortsette.")
                         continue
                 case "4":
                     if not self.validate_tables():
@@ -67,9 +69,11 @@ class DBCreator(DBConnector):
                         self.book_reserved_seats()
                     except IntegrityError:
                         print("Setene er allerede reservert.")
+                        input("Trykk enter for å fortsette.")
                         continue
                     except OperationalError:
                         print("Tabellene er ikke opprettet.")
+                        input("Trykk enter for å fortsette.")
                         continue
                 case "5":
                     return

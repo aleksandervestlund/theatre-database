@@ -1,5 +1,3 @@
-import os
-
 from creation.db_creator import DBCreator
 from creation.db_queryer import DBQueryer
 from creation.db_ticket_orderer import DBTicketOrderer
