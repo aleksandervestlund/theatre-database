@@ -37,7 +37,7 @@ class DBTicketOrderer(DBConnector):
             print("Du har ingen kundeprofil. Vil du opprette en?")
             if validate_input(["j", "n"]) == "n":
                 return
-            self.create_user(phone)
+            name = self.create_user(phone)
         else:
             name = name[0]
 
@@ -49,9 +49,7 @@ class DBTicketOrderer(DBConnector):
         groups = self.get_group(play)
         amount = len(groups)
 
-        fitting_seats = self.get_fitting_seats(
-            play, stage, day, month, len(groups)
-        )
+        fitting_seats = self.get_fitting_seats(play, stage, day, month, amount)
         if not fitting_seats:
             print(
                 "Ingen rader med så mange tilgjengelige seter. Prøv igjen "
@@ -82,12 +80,13 @@ class DBTicketOrderer(DBConnector):
             return False
         return True
 
-    def create_user(self, phone: str) -> None:
+    def create_user(self, phone: str) -> str:
         print("Hva er ditt navn?")
         name = input("[SVAR]: ")
         print("Hva er din adresse?")
         address = input("[SVAR]: ")
         self.insert_rows("Kundeprofil", [(phone, address, name)])
+        return name
 
     def get_play(self) -> str:
         print("Hvilken forestilling ønsker du å se?")
