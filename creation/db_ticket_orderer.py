@@ -55,6 +55,7 @@ class DBTicketOrderer(DBConnector):
                 "Ingen rader med så mange tilgjengelige seter. Prøv igjen "
                 "senere."
             )
+            input("Trykk enter for å fortsette.")
             return
 
         print("Følgende rader er tilgjengelige. Hvilken ønsker du?")
@@ -207,7 +208,8 @@ class DBTicketOrderer(DBConnector):
                             AND S2.Område = S1.Område
                             AND S2.RadNummer = S1.RadNummer
                             AND Billettkjøp.TeaterstykkeNavn = ?
-                            AND DagVises = ? AND MånedVises = ?
+                            AND DagVises = ?
+                            AND MånedVises = ?
                 )
                 LIMIT ?
                 """,

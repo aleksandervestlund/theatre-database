@@ -25,6 +25,7 @@ class DBConnector(ABC):
 
     def validate_tables(self) -> bool:
         try:
+            # Sjekker om vilkårlig tabell finnes
             self.con.execute("SELECT Mobilnummer FROM Kundeprofil")
         except OperationalError:
             print("Tabellene er ikke opprettet.")
@@ -33,6 +34,7 @@ class DBConnector(ABC):
         return True
 
     def validate_rows(self) -> bool:
+        # Sjekker om vilkårlig rad finnes
         if not self.con.execute("SELECT Navn FROM Teaterstykke").fetchall():
             print("Tabellene er tomme.")
             input("Trykk enter for å fortsette.")
@@ -50,8 +52,8 @@ class DBConnector(ABC):
         og bruke samme `attributes`.
 
         :param str table: Navn på tabellen
-        :param list[tuple[Any, ...]] rows: Rader som skal legges til
-        :param Iterable[str] | None attributes: Attributtene som skal settes
+        :param list[tuple] rows: Rader som skal legges til
+        :param Iterable[str] attributes: Attributtene som skal settes
         inn, defaulter til None
         """
         if not rows:

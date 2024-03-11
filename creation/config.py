@@ -173,6 +173,7 @@ HOVEDSCENE_STOLER = []
 HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "Parkett") for plass in range(1, 467)])
 HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "Parkett") for plass in range(471, 495)])
 HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 1) // 28) + 1, "Parkett") for plass in range(499, 505)])
+# Alle radene på galleri har 5 seter
 HOVEDSCENE_STOLER.extend([("Hovedscenen", plass, ((plass - 505) // 5) + 1, "Galleri") for plass in range(505, 525)])
 STOLER.extend(HOVEDSCENE_STOLER)
 

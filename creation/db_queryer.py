@@ -8,8 +8,7 @@ def pretty_print(attributes: list[str], rows: list[tuple[Any, ...]]) -> None:
     """Printer ut en tabell med attributter og rader. Hver rad må ha
     like mange elementer som det er attributter.
 
-    :param list[str] attributes: Attributtene som skal stå over
-    tabellen
+    :param list[str] attributes: Attributtene som skal stå over tabellen
     :param list[tuple] rows: Radene som skal printes ut
     """
     if not rows:

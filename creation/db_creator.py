@@ -38,7 +38,7 @@ class DBCreator(DBConnector):
             print("1: Tøm databasen.")
             print("2: Fyll databasen med tabeller.")
             print("3: Fyll databasen med forhåndsbestemte rader.")
-            print("4: Reserver seter.")
+            print("4: Reserver forhåndsbestilte seter.")
             print("5: Gå tilbake.")
             print("Hvilken mulighet ønsker du?")
 
