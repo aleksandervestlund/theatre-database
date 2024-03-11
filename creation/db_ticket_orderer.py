@@ -36,6 +36,8 @@ class DBTicketOrderer(DBConnector):
         if name is None:
             print("Du har ingen kundeprofil. Vil du opprette en?")
             if validate_input(["j", "n"]) == "n":
+                print("Takk for besøket!")
+                input("Trykk enter for å fortsette.")
                 return
             name = self.create_user(phone)
         else:

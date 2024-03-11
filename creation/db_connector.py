@@ -24,26 +24,6 @@ class DBConnector(ABC):
         self.con.execute("PRAGMA foreign_keys = ON")
         self.cursor = self.con.cursor()
 
-    def validate_tables(self) -> bool:
-        """Sjekker at tabellene finnes."""
-        try:
-            # Sjekker om vilkårlig tabell finnes
-            self.con.execute("SELECT Mobilnummer FROM Kundeprofil")
-        except OperationalError:
-            print("Tabellene er ikke opprettet.")
-            input("Trykk enter for å fortsette.")
-            return False
-        return True
-
-    def validate_rows(self) -> bool:
-        """Sjekker at tabellene er fylt med forhåndsdefinerte rader."""
-        # Sjekker om vilkårlig rad finnes
-        if not self.con.execute("SELECT Navn FROM Teaterstykke").fetchall():
-            print("Tabellene er tomme.")
-            input("Trykk enter for å fortsette.")
-            return False
-        return True
-
     def insert_rows(
         self,
         table: str,
@@ -76,3 +56,23 @@ class DBConnector(ABC):
         self.con.execute("PRAGMA optimize")
         self.con.commit()
         self.con.close()
+
+    def validate_tables(self) -> bool:
+        """Sjekker at tabellene finnes."""
+        try:
+            # Sjekker om vilkårlig tabell finnes
+            self.con.execute("SELECT Mobilnummer FROM Kundeprofil")
+        except OperationalError:
+            print("Tabellene er ikke opprettet.")
+            input("Trykk enter for å fortsette.")
+            return False
+        return True
+
+    def validate_rows(self) -> bool:
+        """Sjekker at tabellene er fylt med forhåndsdefinerte rader."""
+        # Sjekker om vilkårlig rad finnes
+        if not self.con.execute("SELECT Navn FROM Teaterstykke").fetchall():
+            print("Tabellene er tomme.")
+            input("Trykk enter for å fortsette.")
+            return False
+        return True

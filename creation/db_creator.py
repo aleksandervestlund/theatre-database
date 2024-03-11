@@ -73,17 +73,35 @@ class DBCreator(DBConnector):
             print("Suksess!")
             input("Trykk enter for å fortsette.")
 
-    def clear_database(self) -> None:
-        """Sletter databasen og kobler til på nytt."""
-        self.close()
-        if os.path.exists(DB_FILE):
-            os.remove(DB_FILE)
-        self.connect()
-
     def create_tables(self) -> None:
         """Kjører `SQL_FILE`."""
         with open(SQL_FILE, encoding="utf-8") as file:
             self.con.executescript(file.read())
+
+    def fill_tables(self) -> None:
+        """Fyller tabellene med data fra `rows.py`. Avhengig av at
+        `create_tables` har blitt kjørt først.
+        """
+        self.insert_rows("Teaterstykke", TEATERSTYKKER)
+        self.insert_rows("Oppgave", OPPGAVER)
+        # fmt: off
+        self.insert_rows(
+            "Ansatt",
+            ANSATTE,
+            ["Ansattstatus", "EPostadresse", "Navn", "TeaterstykkeNavn", "OppgaveNavn"],
+        )
+        # fmt: on
+        self.insert_rows("Akt", AKTER, ["TeaterstykkeNavn", "Nummer"])
+        self.insert_rows("Rolle", ROLLER)
+        self.insert_rows("DeltarI", DELTAR_I)
+        self.insert_rows("Skuespiller", SKUESPILLERE, ["Navn"])
+        self.insert_rows("SpillerRolle", SPILLER_ROLLER)
+        self.insert_rows("Dato", DATOER)
+        self.insert_rows("Sal", SALER)
+        self.insert_rows("Stol", STOLER)
+        self.insert_rows("Forestilling", FORESTILLINGER)
+        self.insert_rows("Kundeprofil", KUNDEPROFILER)
+        self.insert_rows("Gruppe", GRUPPER)
 
     def book_reserved_seats(self) -> None:
         """Leser filene i `reservations`. Lager et billettkjøp og
@@ -117,27 +135,9 @@ class DBCreator(DBConnector):
                     continue
                 self.insert_rows("Billett", [(i, *chairs[j], play, "Ordinær")])
 
-    def fill_tables(self) -> None:
-        """Fyller tabellene med data fra `rows.py`. Avhengig av at
-        `create_tables` har blitt kjørt først.
-        """
-        self.insert_rows("Teaterstykke", TEATERSTYKKER)
-        self.insert_rows("Oppgave", OPPGAVER)
-        # fmt: off
-        self.insert_rows(
-            "Ansatt",
-            ANSATTE,
-            ["Ansattstatus", "EPostadresse", "Navn", "TeaterstykkeNavn", "OppgaveNavn"],
-        )
-        # fmt: on
-        self.insert_rows("Akt", AKTER, ["TeaterstykkeNavn", "Nummer"])
-        self.insert_rows("Rolle", ROLLER)
-        self.insert_rows("DeltarI", DELTAR_I)
-        self.insert_rows("Skuespiller", SKUESPILLERE, ["Navn"])
-        self.insert_rows("SpillerRolle", SPILLER_ROLLER)
-        self.insert_rows("Dato", DATOER)
-        self.insert_rows("Sal", SALER)
-        self.insert_rows("Stol", STOLER)
-        self.insert_rows("Forestilling", FORESTILLINGER)
-        self.insert_rows("Kundeprofil", KUNDEPROFILER)
-        self.insert_rows("Gruppe", GRUPPER)
+    def clear_database(self) -> None:
+        """Sletter databasen og kobler til på nytt."""
+        self.close()
+        if os.path.exists(DB_FILE):
+            os.remove(DB_FILE)
+        self.connect()
