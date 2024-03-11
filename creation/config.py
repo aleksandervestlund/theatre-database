@@ -264,6 +264,7 @@ ATTRIBUTES = {
     "Område",
     "OppgaveNavn",
     "Pris",
+    "Pris10",
     "RadNummer",
     "RolleNavn",
     "SalNavn",
