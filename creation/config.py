@@ -30,14 +30,14 @@ OPPGAVER = [
 
 # fmt: off
 ANSATTE = [
-    ("Fast", "yury.butusov@trondelag-teater.no", "Yury Butusov", "Kongsemnene", "Regi og musikkutvelgelse"),
-    ("Fast", "aleksandr.shishkin-hokusai@trondelag-teater.no", "Aleksandr Shishkin-Hokusai", "Kongsemnene", "Scenografi og kostymer"),
+    ("Innleid", "yury.butusov@trondelag-teater.no", "Yury Butusov", "Kongsemnene", "Regi og musikkutvelgelse"),
+    ("Innleid", "aleksandr.shishkin-hokusai@trondelag-teater.no", "Aleksandr Shishkin-Hokusai", "Kongsemnene", "Scenografi og kostymer"),
     ("Fast", "eivind.myren@trondelag-teater.no", "Eivind Myren", "Kongsemnene", "Lysdesign"),
     ("Fast", "mina.stokke@trondelag-teater.no", "Mina Rype Stokke", "Kongsemnene", "Dramaturg"),
-    ("Fast", "jonas.petersen@trondelag-teater.no", "Jonas Corell Petersen", "Størst av alt er kjærligheten", "Regi"),
-    ("Fast", "david.gehrt@trondelag-teater.no", "David Gehrt", "Størst av alt er kjærligheten", "Scenografi og kostymer"),
-    ("Fast", "gaute.tonder@trondelag-teater.no", "Gaute Tønder", "Størst av alt er kjærligheten", "Musikalsk ansvarlig"),
-    ("Fast", "magnus.mikaelsen@trondelag-teater.no", "Magnus Mikaelsen", "Størst av alt er kjærligheten", "Lysdesign"),
+    ("Midlertidig", "jonas.petersen@trondelag-teater.no", "Jonas Corell Petersen", "Størst av alt er kjærligheten", "Regi"),
+    ("Innleid", "david.gehrt@trondelag-teater.no", "David Gehrt", "Størst av alt er kjærligheten", "Scenografi og kostymer"),
+    ("Midlertidig", "gaute.tonder@trondelag-teater.no", "Gaute Tønder", "Størst av alt er kjærligheten", "Musikalsk ansvarlig"),
+    ("Midlertidig", "magnus.mikaelsen@trondelag-teater.no", "Magnus Mikaelsen", "Størst av alt er kjærligheten", "Lysdesign"),
     ("Fast", "kristoffer.spender@trondelag-teater.no", "Kristoffer Spender", "Størst av alt er kjærligheten", "Dramaturg"),
 ]
 # fmt: on

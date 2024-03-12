@@ -24,14 +24,22 @@ class DBConnector(ABC):
         self.con.execute("PRAGMA foreign_keys = ON")
         self.cursor = self.con.cursor()
 
+    def close(self) -> None:
+        """Lukker tilkoblingen til databasen. Må kjøres til slutt."""
+        self.con.execute("PRAGMA analysis_limit=1000")
+        self.con.execute("PRAGMA optimize")
+        self.con.commit()
+        self.con.close()
+
     def reconnect(self) -> None:
+        """Avslutter og starter på nytt tilkoblingen til databasen."""
         self.close()
         self.connect()
 
     def validate_tables(self) -> bool:
         """Sjekker at tabellene finnes."""
+        # Sjekker om vilkårlig tabell finnes
         try:
-            # Sjekker om vilkårlig tabell finnes
             self.con.execute("SELECT Mobilnummer FROM Kundeprofil")
         except OperationalError:
             print("Tabellene er ikke opprettet.")
@@ -74,10 +82,3 @@ class DBConnector(ABC):
         command += f"VALUES ({', '.join(('?') * len(rows[0]))})"
         for row in rows:
             self.cursor.execute(command, row)
-
-    def close(self) -> None:
-        """Lukker tilkoblingen til databasen. Må kjøres til slutt."""
-        self.con.execute("PRAGMA analysis_limit=1000")
-        self.con.execute("PRAGMA optimize")
-        self.con.commit()
-        self.con.close()
