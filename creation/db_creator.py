@@ -55,6 +55,7 @@ class DBCreator(DBConnector):
                     except IntegrityError:
                         print("Tabellene er allerede fylt.")
                         input("Trykk enter for å fortsette.")
+                        self.reconnect()
                         continue
                 case "4":
                     if not self.validate_tables():
@@ -66,6 +67,7 @@ class DBCreator(DBConnector):
                     except IntegrityError:
                         print("Setene er allerede reservert.")
                         input("Trykk enter for å fortsette.")
+                        self.reconnect()
                         continue
                 case "5":
                     return

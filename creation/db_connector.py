@@ -23,6 +23,10 @@ class DBConnector(ABC):
         self.con.execute("PRAGMA foreign_keys = ON")
         self.cursor = self.con.cursor()
 
+    def reconnect(self) -> None:
+        self.close()
+        self.connect()
+
     def validate_tables(self) -> bool:
         try:
             # Sjekker om vilkårlig tabell finnes
@@ -30,6 +34,7 @@ class DBConnector(ABC):
         except OperationalError:
             print("Tabellene er ikke opprettet.")
             input("Trykk enter for å fortsette.")
+            self.reconnect()
             return False
         return True
 

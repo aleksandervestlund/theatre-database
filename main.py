@@ -1,27 +1,10 @@
-from sqlite3 import IntegrityError
-
 from creation.db_creator import DBCreator
 from creation.db_queryer import DBQueryer
 from creation.db_ticket_orderer import DBTicketOrderer
 from creation.helpers import clear_terminal, validate_input
 
 
-def test_db_creator() -> None:
-    dbc = DBCreator()
-    dbc.clear_database()
-    dbc.create_tables()
-    dbc.fill_tables()
-    try:
-        dbc.fill_tables()
-    except IntegrityError:
-        print("Hola")
-    dbc.clear_database()
-    dbc.close()
-
-
 def main() -> None:
-    test_db_creator()
-
     while True:
         clear_terminal()
         print("+--------------------------------------------------------+")
