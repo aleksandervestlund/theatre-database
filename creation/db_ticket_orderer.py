@@ -36,6 +36,8 @@ class DBTicketOrderer(DBConnector):
         if name is None:
             print("Du har ingen kundeprofil. Vil du opprette en?")
             if validate_input(["j", "n"]) == "n":
+                print("Takk for besøket!")
+                input("Trykk enter for å fortsette.")
                 return
             name = self.create_user(phone)
         else:
@@ -75,6 +77,7 @@ class DBTicketOrderer(DBConnector):
         input("Trykk enter for å fortsette.")
 
     def validate_tickets(self) -> bool:
+        """Sjekker at det finnes forhåndsbestillinger."""
         if not self.con.execute("SELECT ID FROM Billettkjøp").fetchall():
             print("Forhåndsbestillinger må leses.")
             input("Trykk enter for å fortsette.")
@@ -82,6 +85,7 @@ class DBTicketOrderer(DBConnector):
         return True
 
     def create_user(self, phone: str) -> str:
+        """Lager en ny kundeprofil."""
         print("Hva er ditt navn?")
         name = input("[SVAR]: ")
         print("Hva er din adresse?")
@@ -90,6 +94,7 @@ class DBTicketOrderer(DBConnector):
         return name
 
     def get_play(self) -> str:
+        """Finner lovlige teaterstykker og lar brukeren velge."""
         print("Hvilken forestilling ønsker du å se?")
         plays = [
             play[0]
@@ -100,6 +105,7 @@ class DBTicketOrderer(DBConnector):
         return validate_input(plays)
 
     def get_stage(self, play: str) -> str:
+        """Finner salen forestillingen spilles i."""
         return self.cursor.execute(
             """
             SELECT SalNavn
@@ -111,6 +117,9 @@ class DBTicketOrderer(DBConnector):
         ).fetchone()[0]
 
     def get_date(self, play: str) -> tuple[int, int]:
+        """Finner alle datoer forestillingen spilles og lar brukeren
+        velge.
+        """
         dates = [
             f"{day}/{month}"
             for day, month in self.cursor.execute(
@@ -130,6 +139,7 @@ class DBTicketOrderer(DBConnector):
         return day, month
 
     def get_group(self, play: str) -> list[str]:
+        """Finner alle grupper og lar brukeren velge."""
         all_groups = [
             group[0]
             for group in self.cursor.execute(
@@ -155,6 +165,7 @@ class DBTicketOrderer(DBConnector):
     def get_fitting_seats(
         self, play: str, stage: str, day: int, month: int, amount: int
     ) -> list[tuple[str, int]]:
+        """Finner rader med nok ledige seter."""
         return self.cursor.execute(
             """
             SELECT Område, RadNummer
@@ -188,6 +199,7 @@ class DBTicketOrderer(DBConnector):
         area: str,
         row: int,
     ) -> list[int]:
+        """Finner ledige seter."""
         return [
             seat[0]
             for seat in self.cursor.execute(
@@ -229,6 +241,7 @@ class DBTicketOrderer(DBConnector):
         seat_numbers: list[int],
         groups: list[str],
     ) -> int:
+        """Fyller tabellene med billettkjøp og billetter."""
         ticket_id = self.cursor.execute(
             "SELECT MAX(ID) + 1 FROM Billettkjøp"
         ).fetchone()[0]
@@ -246,6 +259,7 @@ class DBTicketOrderer(DBConnector):
         return ticket_id
 
     def calculate_price(self, ticket_id: int) -> int:
+        """Regner ut prisen for billettene."""
         prices = self.cursor.execute(
             """
             SELECT COUNT(StolNummer), Pris, Pris10
