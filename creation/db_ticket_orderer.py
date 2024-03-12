@@ -222,7 +222,7 @@ class DBTicketOrderer(DBConnector):
                             AND Billettkjøp.TeaterstykkeNavn = ?
                             AND DagVises = ?
                             AND MånedVises = ?
-                )
+                    )
                 LIMIT ?
                 """,
                 (stage, area, row, play, day, month, amount),

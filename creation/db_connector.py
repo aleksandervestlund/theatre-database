@@ -38,9 +38,8 @@ class DBConnector(ABC):
 
     def validate_tables(self) -> bool:
         """Sjekker at tabellene finnes."""
-        # Sjekker om vilkårlig tabell finnes
         try:
-            self.con.execute("SELECT Mobilnummer FROM Kundeprofil")
+            self.con.execute("SELECT Mobilnummer FROM Kundeprofil").fetchone()
         except OperationalError:
             print("Tabellene er ikke opprettet.")
             self.reconnect()
@@ -50,7 +49,6 @@ class DBConnector(ABC):
 
     def validate_rows(self) -> bool:
         """Sjekker at tabellene er fylt med forhåndsdefinerte rader."""
-        # Sjekker om vilkårlig rad finnes
         if not self.con.execute("SELECT Navn FROM Teaterstykke").fetchall():
             print("Tabellene er tomme.")
             input("Trykk enter for å fortsette.")
