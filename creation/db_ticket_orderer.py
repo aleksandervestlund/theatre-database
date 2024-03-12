@@ -1,18 +1,10 @@
-import re
-
 from creation.config import TODAY_DAY, TODAY_MONTH
 from creation.db_connector import DBConnector
-from creation.helpers import clear_terminal, validate_input
-
-
-def get_phone_number() -> str:
-    """Henter et gyldig norsk telefonnummeret fra brukeren."""
-    print("Hva er ditt telefonnummer?")
-    while re.fullmatch(r"(0047)?\d{8}", phone := input("[SVAR]: ")) is None:
-        print("Ugyldig telefonnummer. Prøv igjen.")
-    if len(phone) == 8:
-        phone = "0047" + phone
-    return phone
+from creation.helpers import (
+    clear_terminal,
+    validate_input,
+    validate_phone_number,
+)
 
 
 class DBTicketOrderer(DBConnector):
@@ -29,7 +21,12 @@ class DBTicketOrderer(DBConnector):
         print("|                   Bestill billetter                    |")
         print("+--------------------------------------------------------+")
 
-        phone = get_phone_number()
+        print("Hva er ditt telefonnummer?")
+        while not validate_phone_number(phone := input("[SVAR]: ")):
+            print("Ugyldig telefonnummer. Prøv igjen.")
+        if len(phone) == 8:
+            phone = f"0047{phone}"
+
         name = self.cursor.execute(
             "SELECT Navn FROM Kundeprofil WHERE Mobilnummer = ?", (phone,)
         ).fetchone()

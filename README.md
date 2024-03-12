@@ -28,14 +28,14 @@ Dersom du velger dette alternativet, får du fire nye valg.
 
 - `1: Tøm databasen`. Dette alternativet sletter alle rader og tabeller fra databasen.
 - `2: Fyll databasen med tabeller`. Dette alternativet leser `schema.sql`-filen og lager de forskjellige tabellene, som er ekvivalent med `sqlite3 teater.db < schema.sql`.
-- `3: Fyll databasen med forhåndsbestemte rader`. Dette alternativet legger til alle forhåndsdefinerte rader beskrevet i prosjektbeskrivelsen.
-- `4: Reserver forhåndsbestilte seter`. Dette alternativet leser `hovedscenen.txt` og `gamle-scene.txt` for å reservere setene bestemt der.
+- `3: Fyll databasen med forhåndsbestemte rader`. Dette alternativet legger til alle forhåndsdefinerte rader beskrevet i prosjektbeskrivelsen. Her kreves det at `2: Fyll databasen med tabeller` har blitt gjennomført.
+- `4: Reserver forhåndsbestilte seter`. Dette alternativet leser `hovedscenen.txt` og `gamle-scene.txt` for å reservere setene bestemt der. Her kreves det at både `2: Fyll databasen med tabeller` og `3: Fyll databasen med forhåndsbestemte rader` har blitt gjennomført.
 
 ### Bestill billetter
 
 Her får du muligheten til å bestille billetter, der alle setene er på samme rad. Denne viser også prisen på bestillingen.
 
-- For å finne alle rader med nok ledige seter, blir den følgende spørringen kjørt, der spørsmålstegnene blir erstattet av attributtene fra den brukerbestemte forestillingen.
+- For å finne alle rader med nok ledige seter, blir den følgende spørringen kjørt, der spørsmålstegnene blir erstattet av attributtene fra den brukerbestemte forestillingen. Dette krever at `2: Fyll databasen med tabeller`, `3: Fyll databasen med forhåndsbestemte rader`, og `4: Reserver forhåndsbestilte seter` har blitt kjørt på forhånd.
 
 ```sql
 SELECT Område, RadNummer
@@ -88,7 +88,7 @@ LIMIT ?;
 
 ### SQL-spørringer
 
-Dersom du velger dette alternativet, får du fire nye valg.
+Dersom du velger dette alternativet, får du fire nye valg. Alle disse krever at `2: Fyll databasen med tabeller` og `3: Fyll databasen med forhåndsbestemte rader` har blitt kjørt på forhånd.
 
 - `1: Forestillinger på gitt dato`. Dette alternativet viser alle forestillinger på en brukerbestemt dato. Spørringen som blir kjørt ved å velge dette alternativet er som følger, der spørsmålstegnene blir ersattet av den brukerbestemte datoen.
 

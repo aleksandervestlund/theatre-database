@@ -1,38 +1,5 @@
-from typing import Any
-
 from creation.db_connector import DBConnector
-from creation.helpers import clear_terminal, validate_input
-
-
-def pretty_print(attributes: list[str], rows: list[tuple[Any, ...]]) -> None:
-    """Printer ut en tabell med attributter og rader. Hver rad må ha
-    like mange elementer som det er attributter.
-
-    :param list[str] attributes: Attributtene som skal stå over tabellen
-    :param list[tuple] rows: Radene som skal printes ut
-    """
-    if not rows:
-        print("Ingen resultater.")
-        return
-
-    max_lengths = [len(attribute) for attribute in attributes]
-    for i in range(len(rows[0])):
-        for row in rows:
-            max_lengths[i] = max(max_lengths[i], len(str(row[i])))
-
-    separator = f"+{'+'.join('-' * (length + 2) for length in max_lengths)}+"
-
-    print(separator)
-    for i, attribute in enumerate(attributes):
-        print(f"| {attribute:<{max_lengths[i]}}", end=" ")
-    print("|")
-    print(separator)
-
-    for row in rows:
-        for i, value in enumerate(row):
-            print(f"| {value:<{max_lengths[i]}}", end=" ")
-        print("|")
-    print(separator)
+from creation.helpers import clear_terminal, pretty_print, validate_input
 
 
 class DBQueryer(DBConnector):
