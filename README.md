@@ -2,11 +2,21 @@
 
 # Databaseprosjekt
 
+## Table of contents
+
+- [Krav til kjøring](#krav-til-kjøring)
+- [Starting av applikasjonen](#starting-av-applikasjonen)
+- [Valgmuligheter](#valgmuligheter)
+  - [Endre database](#endre-database)
+  - [Bestill billetter](#bestill-billetter)
+  - [SQL-spørringer](#sql-spørringer)
+- [Brukerhistorier](#brukerhistorier)
+
 ## Krav til kjøring
 
 Sørg for at du har lastet ned:
 
-- Python >=3.11.
+- Python >=3.10.
 
 ## Starting av applikasjonen
 
@@ -44,9 +54,9 @@ WHERE SalNavn = ? AND (RadNummer, Område, Nummer) NOT IN (
     SELECT S2.RadNummer, S2.Område, S2.Nummer
     FROM Stol AS S2
         INNER JOIN Billett
-            ON (S2.Nummer = StolNummer
+            ON S2.Nummer = StolNummer
                 AND S2.RadNummer = Billett.RadNummer
-                AND S2.Område = Billett.Område)
+                AND S2.Område = Billett.Område
         INNER JOIN Billettkjøp
             ON (BillettkjøpID = ID)
     WHERE S2.Salnavn = S1.SalNavn
@@ -71,11 +81,11 @@ WHERE SalNavn = ?
         SELECT S2.RadNummer, S2.Område, S2.Nummer
         FROM Stol AS S2
             INNER JOIN Billett
-                ON (S2.Nummer = StolNummer
+                ON S2.Nummer = StolNummer
                     AND S2.RadNummer = Billett.RadNummer
-                    AND S2.Område = Billett.Område)
+                    AND S2.Område = Billett.Område
             INNER JOIN Billettkjøp
-                ON (BillettkjøpID = ID)
+                ON BillettkjøpID = ID
         WHERE S2.Salnavn = S1.SalNavn
             AND S2.Område = S1.Område
             AND S2.RadNummer = S1.RadNummer
