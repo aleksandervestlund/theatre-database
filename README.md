@@ -1,4 +1,4 @@
-> Skrevet av: Andreas Kolstad Bertelsen, Fredrik Oldeide Roos, og Aleksander Thornes Vestlund.
+> Skrevet av: Andreas Kolstad Bertelsen, Robin Rienks Hestad, Fredrik Oldeide Roos, og Aleksander Thornes Vestlund.
 
 # Databaseprosjekt
 
