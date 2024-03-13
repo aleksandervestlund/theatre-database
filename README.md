@@ -2,7 +2,7 @@
 
 # Databaseprosjekt
 
-## Table of contents
+## Innhold
 
 - [Krav til kjøring](#krav-til-kjøring)
 - [Starting av applikasjonen](#starting-av-applikasjonen)
@@ -94,6 +94,17 @@ WHERE SalNavn = ?
             AND MånedVises = ?
     )
 LIMIT ?;
+```
+
+- For å kalkulere prisen på bestillingen, blir den følgende spørringen kjørt, der spørsmålstegnet blir bestemt av den høyeste tilgjengelige `BillettkjøpID`-en. Det er implementert Python-logikk for å bestemme om billettene skal bruke `Pris` eller `Pris10` som pris.
+
+```sql
+SELECT COUNT(StolNummer), Pris, Pris10
+FROM Billett INNER JOIN Gruppe
+    ON (Billett.TeaterstykkeNavn = Gruppe.TeaterstykkeNavn
+        AND GruppeNavn = Navn)
+WHERE BillettkjøpID = ?
+GROUP BY Pris, Pris10
 ```
 
 ### SQL-spørringer
