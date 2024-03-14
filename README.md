@@ -101,8 +101,8 @@ LIMIT ?;
 ```sql
 SELECT COUNT(StolNummer), Pris, Pris10
 FROM Billett INNER JOIN Gruppe
-    ON (Billett.TeaterstykkeNavn = Gruppe.TeaterstykkeNavn
-        AND GruppeNavn = Navn)
+    ON Billett.TeaterstykkeNavn = Gruppe.TeaterstykkeNavn
+        AND GruppeNavn = Navn
 WHERE BillettkjøpID = ?
 GROUP BY Pris, Pris10
 ```
@@ -123,7 +123,8 @@ FROM Forestilling
             AND Forestilling.MånedVises = Billettkjøp.MånedVises
     LEFT OUTER JOIN Billett
         ON Billettkjøp.ID = Billett.BillettkjøpID
-WHERE Forestilling.DagVises = ? AND Forestilling.MånedVises = ?
+WHERE Forestilling.DagVises = ?
+    AND Forestilling.MånedVises = ?
 GROUP BY Forestilling.TeaterstykkeNavn, Forestilling.SalNavn
 ORDER BY Forestilling.TeaterstykkeNavn ASC;
 ```

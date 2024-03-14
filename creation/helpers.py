@@ -2,8 +2,7 @@ import os
 import re
 from collections.abc import Iterable
 from sqlite3 import OperationalError
-
-from pyparsing import Any
+from typing import Any
 
 from creation.config import ATTRIBUTES, TABLES
 
