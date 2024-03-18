@@ -2,6 +2,7 @@ from creation.config import TODAY_DAY, TODAY_MONTH
 from creation.db_connector import DBConnector
 from creation.helpers import (
     clear_terminal,
+    print_header,
     validate_input,
     validate_phone_number,
 )
@@ -17,9 +18,7 @@ class DBTicketOrderer(DBConnector):
             return
 
         clear_terminal()
-        print("+--------------------------------------------------------+")
-        print("|                   Bestill billetter                    |")
-        print("+--------------------------------------------------------+")
+        print_header("Bestill billetter")
 
         print("Hva er ditt telefonnummer?")
         while not validate_phone_number(phone := input("[SVAR]: ")):

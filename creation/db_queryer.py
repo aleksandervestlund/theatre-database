@@ -1,5 +1,10 @@
 from creation.db_connector import DBConnector
-from creation.helpers import clear_terminal, pretty_print, validate_input
+from creation.helpers import (
+    clear_terminal,
+    pretty_print,
+    print_header,
+    validate_input,
+)
 
 
 class DBQueryer(DBConnector):
@@ -11,9 +16,7 @@ class DBQueryer(DBConnector):
 
         while True:
             clear_terminal()
-            print("+--------------------------------------------------------+")
-            print("|                     SQL-spørringer                     |")
-            print("+--------------------------------------------------------+")
+            print_header("SQL-spørringer")
 
             print("1: Forestillinger på gitt dato.")
             print("2: Navn på skuespillere.")

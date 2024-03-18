@@ -45,6 +45,14 @@ def validate_phone_number(phone_number: str) -> bool:
     return re.fullmatch(r"(0047)?\d{8}", phone_number) is not None
 
 
+def print_header(header: str) -> None:
+    """Printer ut overskrift."""
+    length = 56
+    print(f"+{'-' * length}+")
+    print(f"|{header:^{length}}|")
+    print(f"+{'-' * length}+")
+
+
 def pretty_print(attributes: list[str], rows: list[tuple[Any, ...]]) -> None:
     """Printer ut en tabell med attributter og rader. Hver rad må ha
     like mange elementer som det er attributter.
@@ -65,7 +73,7 @@ def pretty_print(attributes: list[str], rows: list[tuple[Any, ...]]) -> None:
 
     print(separator)
     for i, attribute in enumerate(attributes):
-        print(f"| {attribute:<{max_lengths[i]}}", end=" ")
+        print(f"| {attribute:^{max_lengths[i]}}", end=" ")
     print("|")
     print(separator)
 

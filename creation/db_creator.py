@@ -24,16 +24,14 @@ from creation.config import (
     TEATERSTYKKER,
 )
 from creation.db_connector import DBConnector
-from creation.helpers import clear_terminal, validate_input
+from creation.helpers import clear_terminal, print_header, validate_input
 
 
 class DBCreator(DBConnector):
     def ask_user(self) -> None:
         while True:
             clear_terminal()
-            print("+--------------------------------------------------------+")
-            print("|                    Endre databasen                     |")
-            print("+--------------------------------------------------------+")
+            print_header("Endre databasen")
 
             print("1: Tøm databasen.")
             print("2: Fyll databasen med tabeller.")
