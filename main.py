@@ -1,15 +1,13 @@
 from creation.db_creator import DBCreator
 from creation.db_queryer import DBQueryer
 from creation.db_ticket_orderer import DBTicketOrderer
-from creation.helpers import clear_terminal, validate_input
+from creation.helpers import clear_terminal, print_header, validate_input
 
 
 def main() -> None:
     while True:
         clear_terminal()
-        print("+--------------------------------------------------------+")
-        print("|             Velkommen til Trøndelag Teater             |")
-        print("+--------------------------------------------------------+")
+        print_header("Velkommen til Trøndelag Teater")
 
         print("1: Endre database.")
         print("2: Bestill billetter.")
