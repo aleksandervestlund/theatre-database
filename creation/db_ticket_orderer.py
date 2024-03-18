@@ -37,6 +37,7 @@ class DBTicketOrderer(DBConnector):
                 input("Trykk enter for å fortsette.")
                 return
             name = self.create_user(phone)
+            self.con.commit()
         else:
             name = name[0]
 
@@ -69,13 +70,15 @@ class DBTicketOrderer(DBConnector):
         ticket_id = self.book_tickets(
             phone, play, stage, day, month, area, row, seat_numbers, groups
         )
+        self.con.commit()
+
         price = self.calculate_price(ticket_id)
         print(f"Takk for handelen! Prisen for alle billettene er {price} kr.")
         input("Trykk enter for å fortsette.")
 
     def validate_tickets(self) -> bool:
         """Sjekker at det finnes forhåndsbestillinger."""
-        if not self.con.execute("SELECT ID FROM Billettkjøp").fetchall():
+        if not self.cursor.execute("SELECT ID FROM Billettkjøp").fetchall():
             print("Forhåndsbestillinger må leses.")
             input("Trykk enter for å fortsette.")
             return False
@@ -95,7 +98,7 @@ class DBTicketOrderer(DBConnector):
         print("Hvilken forestilling ønsker du å se?")
         plays = [
             play[0]
-            for play in self.con.execute(
+            for play in self.cursor.execute(
                 "SELECT Navn FROM Teaterstykke"
             ).fetchall()
         ]

@@ -72,13 +72,14 @@ class DBCreator(DBConnector):
                 case "5":
                     return
 
+            self.con.commit()
             print("Suksess!")
             input("Trykk enter for å fortsette.")
 
     def create_tables(self) -> None:
         """Kjører `SQL_FILE`."""
         with open(SQL_FILE, encoding="utf-8") as file:
-            self.con.executescript(file.read())
+            self.cursor.executescript(file.read())
 
     def fill_tables(self) -> None:
         """Fyller tabellene med data fra `rows.py`. Avhengig av at
@@ -139,7 +140,7 @@ class DBCreator(DBConnector):
 
     def clear_database(self) -> None:
         """Sletter databasen og kobler til på nytt."""
-        self.close()
+        self.con.close()
         if os.path.exists(DB_FILE):
             os.remove(DB_FILE)
         self.connect()
