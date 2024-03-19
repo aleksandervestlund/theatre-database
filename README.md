@@ -100,11 +100,12 @@ LIMIT ?;
 
 ```sql
 SELECT COUNT(StolNummer), Pris, Pris10
-FROM Billett INNER JOIN Gruppe
-    ON Billett.TeaterstykkeNavn = Gruppe.TeaterstykkeNavn
-        AND GruppeNavn = Navn
+FROM Billett
+    INNER JOIN Gruppe
+        ON Billett.TeaterstykkeNavn = Gruppe.TeaterstykkeNavn
+            AND GruppeNavn = Navn
 WHERE BillettkjøpID = ?
-GROUP BY Pris, Pris10
+GROUP BY Pris, Pris10;
 ```
 
 ### SQL-spørringer
@@ -142,7 +143,9 @@ FROM Akt
     INNER JOIN Skuespiller
         ON SpillerRolle.SkuespillerID = Skuespiller.ID
 GROUP BY SpillerRolle.RolleNavn
-ORDER BY Akt.TeaterstykkeNavn ASC, Skuespiller.Navn ASC, SpillerRolle.RolleNavn ASC;
+ORDER BY Akt.TeaterstykkeNavn ASC,
+    Skuespiller.Navn ASC,
+    SpillerRolle.RolleNavn ASC;
 ```
 
 - `3: Bestselgende forestillinger`. Dette alternativet finner de bestselgende forestillingene og viser hvor mange billetter som har blitt solgt til disse. Spørringen som blir kjørt ved å velge dette alternativet er som følger.
@@ -158,9 +161,13 @@ FROM Forestilling
             AND Forestilling.MånedVises = Billettkjøp.MånedVises
     INNER JOIN Billett
         ON Billettkjøp.ID = Billett.BillettkjøpID
-GROUP BY Forestilling.TeaterstykkeNavn, Forestilling.DagVises, Forestilling.MånedVises
-ORDER BY Antall DESC, Forestilling.MånedVises ASC,
-    Forestilling.TeaterstykkeNavn ASC, Forestilling.DagVises ASC;
+GROUP BY Forestilling.TeaterstykkeNavn,
+    Forestilling.DagVises,
+    Forestilling.MånedVises
+ORDER BY Antall DESC,
+    Forestilling.MånedVises ASC,
+    Forestilling.TeaterstykkeNavn ASC,
+    Forestilling.DagVises ASC;
 ```
 
 - `4: Skuespillere i samme akt som gitt skuespiller`. Dette alternativet finner alle skuespillere som har spilt i samme akt som en brukerbestemt skuespiller. Her er inputen fra brukeren case-sensitivt. Spørringen som blir kjørt ved å velge dette alternativet er som følger, der spørsmålstegnene blir ersattet av det brukerbestemte navnet.
@@ -203,7 +210,7 @@ ORDER BY S2.Navn ASC, DI1.TeaterstykkeNavn ASC;
 
   <img src="img/4_dato.png" width="500px"/>
 
-- `Navn på skuespillere`. Her ble _Ingunn Beate Strige Øyen_ vilkårlig valgt som skuespiller, som ikke spiller i samme akt som _Fabian Heidelberg Lunde_.
+- `Navn på skuespillere`.
 
   <img src="img/5_skuespillere.png" width="500px"/>
 
@@ -211,6 +218,6 @@ ORDER BY S2.Navn ASC, DI1.TeaterstykkeNavn ASC;
 
   <img src="img/6_forestillinger.png" width="500px"/>
 
-- `Skuespillere i samme akt`.
+- `Skuespillere i samme akt`. Her ble _Ingunn Beate Strige Øyen_ vilkårlig valgt som skuespiller, som ikke spiller i samme akt som _Fabian Heidelberg Lunde_.
 
   <img src="img/7_samme_akt.png" width="500px"/>
