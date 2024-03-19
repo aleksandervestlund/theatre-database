@@ -15,7 +15,7 @@ def main() -> None:
         print("4: Avslutt.")
         print("Hva vil du gjøre?")
 
-        match validate_input(["1", "2", "3", "4"]):
+        match validate_input([str(i) for i in range(1, 5)]):
             case "1":
                 dbc = DBCreator()
                 dbc.ask_user()
@@ -30,6 +30,8 @@ def main() -> None:
                 dbq.close()
             case "4":
                 break
+
+        print("Takk for besøket!")
 
 
 if __name__ == "__main__":

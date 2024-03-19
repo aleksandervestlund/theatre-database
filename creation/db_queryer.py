@@ -47,7 +47,8 @@ class DBQueryer(DBConnector):
             f"{day}/{month}"
             for day, month in self.cursor.execute(
                 """
-                SELECT DagVises, MånedVises FROM Forestilling
+                SELECT DagVises, MånedVises
+                FROM Forestilling
                 GROUP BY DagVises, MånedVises
                 ORDER BY MånedVises ASC, DagVises ASC
                 """
@@ -62,14 +63,16 @@ class DBQueryer(DBConnector):
             """
             SELECT Forestilling.TeaterstykkeNavn, Forestilling.SalNavn,
                 COUNT(Billett.BillettkjøpID)
-            FROM Forestilling LEFT OUTER JOIN Billettkjøp
-                ON Forestilling.TeaterstykkeNavn = Billettkjøp.TeaterstykkeNavn 
-                    AND Forestilling.SalNavn = Billettkjøp.SalNavn
-                    AND Forestilling.DagVises = Billettkjøp.DagVises 
-                    AND Forestilling.MånedVises = Billettkjøp.MånedVises
+            FROM Forestilling
+                LEFT OUTER JOIN Billettkjøp
+                    ON Forestilling.TeaterstykkeNavn = Billettkjøp.TeaterstykkeNavn 
+                        AND Forestilling.SalNavn = Billettkjøp.SalNavn
+                        AND Forestilling.DagVises = Billettkjøp.DagVises 
+                        AND Forestilling.MånedVises = Billettkjøp.MånedVises
                 LEFT OUTER JOIN Billett
                     ON Billettkjøp.ID = Billett.BillettkjøpID
-            WHERE Forestilling.DagVises = ? AND Forestilling.MånedVises = ?
+            WHERE Forestilling.DagVises = ?
+                AND Forestilling.MånedVises = ?
             GROUP BY Forestilling.TeaterstykkeNavn, Forestilling.SalNavn
             ORDER BY Forestilling.TeaterstykkeNavn ASC
             """,
@@ -83,10 +86,12 @@ class DBQueryer(DBConnector):
             """
             SELECT Akt.TeaterstykkeNavn, Skuespiller.Navn,
                 SpillerRolle.RolleNavn
-            FROM Akt INNER JOIN DeltarI
-                ON Akt.Nummer = DeltarI.AktNummer
-                    AND Akt.TeaterstykkeNavn = DeltarI.TeaterstykkeNavn
-                INNER JOIN SpillerRolle USING (RolleNavn)
+            FROM Akt
+                INNER JOIN DeltarI
+                    ON Akt.Nummer = DeltarI.AktNummer
+                        AND Akt.TeaterstykkeNavn = DeltarI.TeaterstykkeNavn
+                INNER JOIN SpillerRolle
+                    USING (RolleNavn)
                 INNER JOIN Skuespiller
                     ON SpillerRolle.SkuespillerID = Skuespiller.ID
             GROUP BY SpillerRolle.RolleNavn
@@ -104,12 +109,14 @@ class DBQueryer(DBConnector):
             """
             SELECT Forestilling.TeaterstykkeNavn, Forestilling.DagVises,
                 Forestilling.MånedVises, COUNT(Billett.BillettkjøpID) AS Antall
-            FROM Forestilling INNER JOIN Billettkjøp
-                ON Forestilling.TeaterstykkeNavn = Billettkjøp.TeaterstykkeNavn 
-                    AND Forestilling.SalNavn = Billettkjøp.SalNavn
-                    AND Forestilling.DagVises = Billettkjøp.DagVises 
-                    AND Forestilling.MånedVises = Billettkjøp.MånedVises
-                INNER JOIN Billett ON Billettkjøp.ID = Billett.BillettkjøpID
+            FROM Forestilling
+                INNER JOIN Billettkjøp
+                    ON Forestilling.TeaterstykkeNavn = Billettkjøp.TeaterstykkeNavn 
+                        AND Forestilling.SalNavn = Billettkjøp.SalNavn
+                        AND Forestilling.DagVises = Billettkjøp.DagVises 
+                        AND Forestilling.MånedVises = Billettkjøp.MånedVises
+                INNER JOIN Billett
+                    ON Billettkjøp.ID = Billett.BillettkjøpID
             GROUP BY Forestilling.TeaterstykkeNavn, Forestilling.DagVises,
                 Forestilling.MånedVises
             ORDER BY Antall DESC, Forestilling.MånedVises ASC,
@@ -133,11 +140,16 @@ class DBQueryer(DBConnector):
         rows = self.cursor.execute(
             """
             SELECT S1.Navn, S2.Navn, DI1.TeaterstykkeNavn
-            FROM Skuespiller AS S1 CROSS JOIN Skuespiller AS S2
-                INNER JOIN SpillerRolle AS SR1 ON S1.ID = SR1.SkuespillerID
-                INNER JOIN SpillerRolle AS SR2 ON S2.ID = SR2.SkuespillerID
-                INNER JOIN DeltarI AS DI1 ON SR1.RolleNavn = DI1.RolleNavn
-                INNER JOIN DeltarI AS DI2 ON SR2.RolleNavn = DI2.RolleNavn
+            FROM Skuespiller AS S1
+                CROSS JOIN Skuespiller AS S2
+                INNER JOIN SpillerRolle AS SR1
+                    ON S1.ID = SR1.SkuespillerID
+                INNER JOIN SpillerRolle AS SR2
+                    ON S2.ID = SR2.SkuespillerID
+                INNER JOIN DeltarI AS DI1
+                    ON SR1.RolleNavn = DI1.RolleNavn
+                INNER JOIN DeltarI AS DI2
+                    ON SR2.RolleNavn = DI2.RolleNavn
             WHERE S1.Navn = ?
                 AND S1.Navn <> S2.Navn
                 AND DI1.TeaterstykkeNavn = DI2.TeaterstykkeNavn

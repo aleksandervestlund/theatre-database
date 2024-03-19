@@ -2,12 +2,14 @@ import os
 import random
 from pathlib import Path
 
-__root = Path(__file__).parent.parent.resolve()
-DB_FILE = os.path.join(__root, "teater.db")
-SQL_FILE = os.path.join(__root, "creation", "schema.sql")
-HOVEDSCENE_FILE = os.path.join(__root, "reservations", "hovedscenen")
-GAMLE_SCENE_FILE = os.path.join(__root, "reservations", "gamle-scene")
+# For å kunne kjøre filer uavhengig av hvor de ligger hos brukeren
+root = Path(__file__).parent.parent.resolve()
+DB_FILE = os.path.join(root, "teater.db")
+SQL_FILE = os.path.join(root, "creation", "schema.sql")
+HOVEDSCENE_FILE = os.path.join(root, "reservations", "hovedscenen")
+GAMLE_SCENE_FILE = os.path.join(root, "reservations", "gamle-scene")
 
+# Gir en tilfeldig dato i januar
 TODAY_MONTH = 1
 TODAY_DAY = random.randint(2, 31)
 
@@ -223,22 +225,22 @@ GRUPPER = [
 ]
 
 TABLES = {
-    "Teaterstykke",
-    "Oppgave",
-    "Ansatt",
     "Akt",
-    "Rolle",
+    "Ansatt",
+    "Billett",
+    "Billettkjøp",
+    "Dato",
     "DeltarI",
+    "Forestilling",
+    "Gruppe",
+    "Kundeprofil",
+    "Oppgave",
+    "Rolle",
+    "Sal",
     "Skuespiller",
     "SpillerRolle",
-    "Dato",
-    "Sal",
     "Stol",
-    "Forestilling",
-    "Kundeprofil",
-    "Gruppe",
-    "Billettkjøp",
-    "Billett",
+    "Teaterstykke",
 }
 
 ATTRIBUTES = {

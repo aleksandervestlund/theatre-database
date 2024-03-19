@@ -76,9 +76,11 @@ class DBConnector(ABC):
             return
         validate_table_name(table)
         command = f"INSERT INTO {table} "
+
         if attributes is not None:
             validate_attribute_names(attributes)
             command += f"({', '.join(attributes)}) "
+
         command += f"VALUES ({', '.join(('?') * len(rows[0]))})"
         for row in rows:
             self.cursor.execute(command, row)

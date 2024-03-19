@@ -40,7 +40,7 @@ class DBCreator(DBConnector):
             print("5: Gå tilbake.")
             print("Hvilken mulighet ønsker du?")
 
-            match validate_input(["1", "2", "3", "4", "5"]):
+            match validate_input([str(i) for i in range(1, 6)]):
                 case "1":
                     self.clear_database()
                 case "2":
@@ -48,6 +48,7 @@ class DBCreator(DBConnector):
                 case "3":
                     if not self.validate_tables():
                         continue
+
                     try:
                         self.fill_tables()
                     except IntegrityError:
@@ -60,6 +61,7 @@ class DBCreator(DBConnector):
                         continue
                     if not self.validate_rows():
                         continue
+
                     try:
                         self.book_reserved_seats()
                     except IntegrityError:
@@ -80,7 +82,7 @@ class DBCreator(DBConnector):
             self.cursor.executescript(file.read())
 
     def fill_tables(self) -> None:
-        """Fyller tabellene med data fra `rows.py`. Avhengig av at
+        """Fyller tabellene med data fra `config.py`. Avhengig av at
         `create_tables` har blitt kjørt først.
         """
         self.insert_rows("Teaterstykke", TEATERSTYKKER)
@@ -117,6 +119,7 @@ class DBCreator(DBConnector):
         for i, info in enumerate(info_list, 1):
             play, filename, chairs = info
             scene = " ".join(filename.split(os.sep)[-1].split("-")).title()
+
             with open(f"{filename}.txt", encoding="utf-8") as file:
                 month, day = [
                     int(number) for number in file.readline().split("-")[1:]

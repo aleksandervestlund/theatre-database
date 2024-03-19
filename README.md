@@ -43,7 +43,7 @@ Dersom du velger dette alternativet, får du fire nye valg.
 
 ### Bestill billetter
 
-Her får du muligheten til å bestille billetter, der alle setene er på samme rad. Denne viser også prisen på bestillingen.
+Her får du muligheten til å bestille billetter, der alle setene er på samme rad. Denne viser også prisen på bestillingen. Brukeren får først spørsmål om deres telefonnummer, som må være et gyldig norsk telefonnummer, og dersom dette ikke finnes i databasen får de mulighet til å lage en kundeprofil.
 
 - For å finne alle rader med nok ledige seter, blir den følgende spørringen kjørt, der spørsmålstegnene blir erstattet av attributtene fra den brukerbestemte forestillingen. Dette krever at `2: Fyll databasen med tabeller`, `3: Fyll databasen med forhåndsbestemte rader`, og `4: Reserver forhåndsbestilte seter` har blitt kjørt på forhånd.
 
@@ -58,7 +58,7 @@ WHERE SalNavn = ? AND (RadNummer, Område, Nummer) NOT IN (
                 AND S2.RadNummer = Billett.RadNummer
                 AND S2.Område = Billett.Område
         INNER JOIN Billettkjøp
-            ON (BillettkjøpID = ID)
+            ON BillettkjøpID = ID
     WHERE S2.Salnavn = S1.SalNavn
         AND Billettkjøp.TeaterstykkeNavn = ?
         AND DagVises = ?
@@ -69,7 +69,7 @@ HAVING COUNT(Nummer) >= ?
 ORDER BY Område ASC, RadNummer ASC;
 ```
 
-- For å finne setenumrene som finnes på den brukerbestemte raden, blir den følgende spørringen kjørt.
+- Brukeren blir dermed spurt om å velge en rad, som er case-sensitiv. For å finne setenumrene som finnes på den brukerbestemte raden, blir den følgende spørringen kjørt.
 
 ```sql
 SELECT Nummer
@@ -163,7 +163,7 @@ ORDER BY Antall DESC, Forestilling.MånedVises ASC,
     Forestilling.TeaterstykkeNavn ASC, Forestilling.DagVises ASC;
 ```
 
-- `4: Skuespillere i samme akt som gitt skuespiller`. Dette alternativet finner alle skuespillere som har spilt i samme akt som en brukerbestemt skuespiller. Spørringen som blir kjørt ved å velge dette alternativet er som følger, der spørsmålstegnene blir ersattet av det brukerbestemte navnet.
+- `4: Skuespillere i samme akt som gitt skuespiller`. Dette alternativet finner alle skuespillere som har spilt i samme akt som en brukerbestemt skuespiller. Her er inputen fra brukeren case-sensitivt. Spørringen som blir kjørt ved å velge dette alternativet er som følger, der spørsmålstegnene blir ersattet av det brukerbestemte navnet.
 
 ```sql
 SELECT S1.Navn, S2.Navn, DI1.TeaterstykkeNavn

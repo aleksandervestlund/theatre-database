@@ -108,8 +108,9 @@ class DBTicketOrderer(DBConnector):
         return self.cursor.execute(
             """
             SELECT SalNavn
-            FROM Teaterstykke INNER JOIN Forestilling
-                ON Navn = TeaterstykkeNavn
+            FROM Teaterstykke
+                INNER JOIN Forestilling
+                    ON Navn = TeaterstykkeNavn
             WHERE Navn = ?
             """,
             (play,),
@@ -172,10 +173,12 @@ class DBTicketOrderer(DBConnector):
             WHERE SalNavn = ? AND (RadNummer, Område, Nummer) NOT IN (
                 SELECT S2.RadNummer, S2.Område, S2.Nummer
                 FROM Stol AS S2
-                    INNER JOIN Billett ON (S2.Nummer = StolNummer
-                        AND S2.RadNummer = Billett.RadNummer
-                        AND S2.Område = Billett.Område)
-                    INNER JOIN Billettkjøp ON (BillettkjøpID = ID)
+                    INNER JOIN Billett
+                        ON S2.Nummer = StolNummer
+                            AND S2.RadNummer = Billett.RadNummer
+                            AND S2.Område = Billett.Område
+                    INNER JOIN Billettkjøp
+                        ON BillettkjøpID = ID
                 WHERE S2.Salnavn = S1.SalNavn
                     AND Billettkjøp.TeaterstykkeNavn = ?
                     AND DagVises = ?
@@ -211,10 +214,12 @@ class DBTicketOrderer(DBConnector):
                     AND (RadNummer, Område, Nummer) NOT IN (
                         SELECT S2.RadNummer, S2.Område, S2.Nummer
                         FROM Stol AS S2
-                            INNER JOIN Billett ON (S2.Nummer = StolNummer
-                                AND S2.RadNummer = Billett.RadNummer
-                                AND S2.Område = Billett.Område)
-                            INNER JOIN Billettkjøp ON (BillettkjøpID = ID)
+                            INNER JOIN Billett
+                                ON S2.Nummer = StolNummer
+                                    AND S2.RadNummer = Billett.RadNummer
+                                    AND S2.Område = Billett.Område
+                            INNER JOIN Billettkjøp
+                                ON BillettkjøpID = ID
                         WHERE S2.Salnavn = S1.SalNavn
                             AND S2.Område = S1.Område
                             AND S2.RadNummer = S1.RadNummer
@@ -241,6 +246,7 @@ class DBTicketOrderer(DBConnector):
         groups: list[str],
     ) -> int:
         """Fyller tabellene med billettkjøp og billetter."""
+        # INTEGER har AUTOINCREMENT, men må vite hvilken ID som ble tildelt
         ticket_id = self.cursor.execute(
             "SELECT MAX(ID) + 1 FROM Billettkjøp"
         ).fetchone()[0]
@@ -262,9 +268,10 @@ class DBTicketOrderer(DBConnector):
         prices = self.cursor.execute(
             """
             SELECT COUNT(StolNummer), Pris, Pris10
-            FROM Billett INNER JOIN Gruppe
-                ON (Billett.TeaterstykkeNavn = Gruppe.TeaterstykkeNavn
-                    AND GruppeNavn = Navn)
+            FROM Billett 
+                INNER JOIN Gruppe
+                    ON Billett.TeaterstykkeNavn = Gruppe.TeaterstykkeNavn
+                        AND GruppeNavn = Navn
             WHERE BillettkjøpID = ?
             GROUP BY Pris, Pris10
             """,
