@@ -5,7 +5,7 @@ from pathlib import Path
 # For å kunne kjøre filer uavhengig av hvor de ligger hos brukeren
 root = Path(__file__).parent.parent.resolve()
 DB_FILE = os.path.join(root, "teater.db")
-SQL_FILE = os.path.join(root, "creation", "schema.sql")
+SQL_FILE = os.path.join(root, "schema.sql")
 HOVEDSCENE_FILE = os.path.join(root, "reservations", "hovedscenen")
 GAMLE_SCENE_FILE = os.path.join(root, "reservations", "gamle-scene")
 
