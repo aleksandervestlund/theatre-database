@@ -79,7 +79,7 @@ class DBCreator(DBConnector):
     def create_tables(self) -> None:
         """Kjører `SQL_FILE`."""
         with open(SQL_FILE, encoding="utf-8") as file:
-            self.cursor.executescript(file.read())
+            self.cur.executescript(file.read())
 
     def fill_tables(self) -> None:
         """Fyller tabellene med data fra `config.py`. Avhengig av at

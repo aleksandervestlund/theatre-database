@@ -26,7 +26,7 @@ class DBTicketOrderer(DBConnector):
         if len(phone) == 8:
             phone = f"0047{phone}"
 
-        name = self.cursor.execute(
+        name = self.cur.execute(
             "SELECT Navn FROM Kundeprofil WHERE Mobilnummer = ?", (phone,)
         ).fetchone()
         if name is None:
@@ -77,7 +77,7 @@ class DBTicketOrderer(DBConnector):
 
     def validate_tickets(self) -> bool:
         """Sjekker at det finnes forhåndsbestillinger."""
-        if not self.cursor.execute("SELECT ID FROM Billettkjøp").fetchall():
+        if not self.cur.execute("SELECT ID FROM Billettkjøp").fetchall():
             print("Forhåndsbestillinger må leses.")
             input("Trykk enter for å fortsette.")
             return False
@@ -97,7 +97,7 @@ class DBTicketOrderer(DBConnector):
         print("Hvilken forestilling ønsker du å se?")
         plays = [
             play[0]
-            for play in self.cursor.execute(
+            for play in self.cur.execute(
                 "SELECT Navn FROM Teaterstykke"
             ).fetchall()
         ]
@@ -105,7 +105,7 @@ class DBTicketOrderer(DBConnector):
 
     def get_stage(self, play: str) -> str:
         """Finner salen forestillingen spilles i."""
-        return self.cursor.execute(
+        return self.cur.execute(
             """
             SELECT SalNavn
             FROM Teaterstykke
@@ -122,7 +122,7 @@ class DBTicketOrderer(DBConnector):
         """
         dates = [
             f"{day}/{month}"
-            for day, month in self.cursor.execute(
+            for day, month in self.cur.execute(
                 """
                 SELECT DagVises, MånedVises
                 FROM Forestilling
@@ -142,7 +142,7 @@ class DBTicketOrderer(DBConnector):
         """Finner alle grupper og lar brukeren velge."""
         all_groups = [
             group[0]
-            for group in self.cursor.execute(
+            for group in self.cur.execute(
                 "SELECT Navn FROM Gruppe WHERE TeaterstykkeNavn = ?",
                 (play,),
             ).fetchall()
@@ -166,7 +166,7 @@ class DBTicketOrderer(DBConnector):
         self, play: str, stage: str, day: int, month: int, amount: int
     ) -> list[tuple[str, int]]:
         """Finner rader med nok ledige seter."""
-        return self.cursor.execute(
+        return self.cur.execute(
             """
             SELECT Område, RadNummer
             FROM Stol AS S1
@@ -204,7 +204,7 @@ class DBTicketOrderer(DBConnector):
         """Finner ledige seter."""
         return [
             seat[0]
-            for seat in self.cursor.execute(
+            for seat in self.cur.execute(
                 """
                 SELECT Nummer
                 FROM Stol AS S1
@@ -247,7 +247,7 @@ class DBTicketOrderer(DBConnector):
     ) -> int:
         """Fyller tabellene med billettkjøp og billetter."""
         # INTEGER har AUTOINCREMENT, men må vite hvilken ID som ble tildelt
-        ticket_id = self.cursor.execute(
+        ticket_id = self.cur.execute(
             "SELECT MAX(ID) + 1 FROM Billettkjøp"
         ).fetchone()[0]
 
@@ -265,7 +265,7 @@ class DBTicketOrderer(DBConnector):
 
     def calculate_price(self, ticket_id: int) -> int:
         """Regner ut prisen for billettene."""
-        prices = self.cursor.execute(
+        prices = self.cur.execute(
             """
             SELECT COUNT(StolNummer), Pris, Pris10
             FROM Billett 

@@ -21,13 +21,13 @@ class DBConnector(ABC):
     def connect(self) -> None:
         """Kobler til databasen. Blir kjørt i konstruktøren."""
         self.con = sqlite3.connect(DB_FILE)
-        self.cursor = self.con.cursor()
-        self.cursor.execute("PRAGMA foreign_keys = ON")
+        self.cur = self.con.cursor()
+        self.cur.execute("PRAGMA foreign_keys = ON")
 
     def close(self) -> None:
         """Lukker tilkoblingen til databasen. Må kjøres til slutt."""
-        self.cursor.execute("PRAGMA analysis_limit=1000")
-        self.cursor.execute("PRAGMA optimize")
+        self.cur.execute("PRAGMA analysis_limit=1000")
+        self.cur.execute("PRAGMA optimize")
         self.con.commit()
         self.con.close()
 
@@ -39,9 +39,7 @@ class DBConnector(ABC):
     def validate_tables(self) -> bool:
         """Sjekker at tabellene finnes."""
         try:
-            self.cursor.execute(
-                "SELECT Mobilnummer FROM Kundeprofil"
-            ).fetchone()
+            self.cur.execute("SELECT Mobilnummer FROM Kundeprofil").fetchone()
         except OperationalError:
             print("Tabellene er ikke opprettet.")
             self.reconnect()
@@ -51,7 +49,7 @@ class DBConnector(ABC):
 
     def validate_rows(self) -> bool:
         """Sjekker at tabellene er fylt med forhåndsdefinerte rader."""
-        if not self.cursor.execute("SELECT Navn FROM Teaterstykke").fetchall():
+        if not self.cur.execute("SELECT Navn FROM Teaterstykke").fetchall():
             print("Tabellene er tomme.")
             input("Trykk enter for å fortsette.")
             return False
@@ -83,4 +81,4 @@ class DBConnector(ABC):
 
         command += f"VALUES ({', '.join(('?') * len(rows[0]))})"
         for row in rows:
-            self.cursor.execute(command, row)
+            self.cur.execute(command, row)

@@ -45,7 +45,7 @@ class DBQueryer(DBConnector):
         """
         all_dates = [
             f"{day}/{month}"
-            for day, month in self.cursor.execute(
+            for day, month in self.cur.execute(
                 """
                 SELECT DagVises, MånedVises
                 FROM Forestilling
@@ -59,7 +59,7 @@ class DBQueryer(DBConnector):
             int(number) for number in validate_input(all_dates).split("/")
         ]
 
-        rows = self.cursor.execute(
+        rows = self.cur.execute(
             """
             SELECT Forestilling.TeaterstykkeNavn, Forestilling.SalNavn,
                 COUNT(Billett.BillettkjøpID)
@@ -82,7 +82,7 @@ class DBQueryer(DBConnector):
 
     def get_actors(self) -> None:
         """Printer ut skuespillerene og hvilke roller de har."""
-        rows = self.cursor.execute(
+        rows = self.cur.execute(
             """
             SELECT Akt.TeaterstykkeNavn, Skuespiller.Navn,
                 SpillerRolle.RolleNavn
@@ -105,7 +105,7 @@ class DBQueryer(DBConnector):
         """Printer ut forestillinger og hvor mange billetter som er
         solgt.
         """
-        rows = self.cursor.execute(
+        rows = self.cur.execute(
             """
             SELECT Forestilling.TeaterstykkeNavn, Forestilling.DagVises,
                 Forestilling.MånedVises, COUNT(Billett.BillettkjøpID) AS Antall
@@ -130,14 +130,14 @@ class DBQueryer(DBConnector):
     def get_actors_in_same_act(self) -> None:
         all_actors = [
             actor[0]
-            for actor in self.cursor.execute(
+            for actor in self.cur.execute(
                 "SELECT Navn FROM Skuespiller"
             ).fetchall()
         ]
         print("Oppgi skuespiller:")
         name = validate_input(all_actors)
 
-        rows = self.cursor.execute(
+        rows = self.cur.execute(
             """
             SELECT S1.Navn, S2.Navn, DI1.TeaterstykkeNavn
             FROM Skuespiller AS S1
