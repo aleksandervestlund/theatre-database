@@ -206,7 +206,7 @@ ORDER BY S2.Navn ASC, DI1.TeaterstykkeNavn ASC;
 
   <img src="img/3_reserver.png" width="500px"/>
 
-- `Forestilling på dato`.
+- `Forestilling på dato`. Her er det verdt å nevne at det er solgt 36 billetter til _Størst av alt er kjærligheten_, hvorav 27 er forhåndsbestillinger og 9 er fra tidligere brukerhistorie.
 
   <img src="img/4_dato.png" width="500px"/>
 
@@ -214,7 +214,7 @@ ORDER BY S2.Navn ASC, DI1.TeaterstykkeNavn ASC;
 
   <img src="img/5_skuespillere.png" width="500px"/>
 
-- `Bestselgende forestillinger`. Her er det verdt å nevne at det er solgt 36 billetter til _Størst av alt er kjærligheten_, hvorav 27 er forhåndsbestillinger og 9 er fra tidligere brukerhistorie.
+- `Bestselgende forestillinger`.
 
   <img src="img/6_forestillinger.png" width="500px"/>
 
