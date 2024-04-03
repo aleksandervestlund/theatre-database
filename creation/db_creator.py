@@ -23,7 +23,6 @@ from creation.config import (
     STOLER,
     TEATERSTYKKER,
 )
-
 from creation.db_connector import DBConnector
 from creation.helpers import clear_terminal, print_header, validate_input
 
@@ -118,27 +117,30 @@ class DBCreator(DBConnector):
         ]
         # fmt: on
         for i, info in enumerate(info_list, 1):
-            play, filename, chairs = info
-            scene = " ".join(filename.split(os.sep)[-1].split("-")).title()
+            self.read_from_file(i, info)
 
-            with open(f"{filename}.txt", encoding="utf-8") as file:
-                month, day = [
-                    int(number) for number in file.readline().split("-")[1:]
-                ]
-                seats_string = "".join(
-                    line.strip()
-                    for line in reversed(file.readlines())
-                    if line[0] in {"0", "1", "x"}
-                )
+    def read_from_file(self, idx: int, info: list) -> None:
+        play, filename, chairs = info
+        scene = " ".join(filename.split(os.sep)[-1].split("-")).title()
 
-            self.insert_rows(
-                "Billettkjøp",
-                [(i, 1, 1, KUNDEPROFILER[0][0], play, scene, month, day)],
+        with open(f"{filename}.txt", encoding="utf-8") as file:
+            month, day = [
+                int(number) for number in file.readline().split("-")[1:]
+            ]
+            seats_string = "".join(
+                line.strip()
+                for line in reversed(file.readlines())
+                if line[0] in {"0", "1", "x"}
             )
-            for j, seat in enumerate(seats_string):
-                if seat != "1":
-                    continue
-                self.insert_rows("Billett", [(i, *chairs[j], play, "Ordinær")])
+
+        self.insert_rows(
+            "Billettkjøp",
+            [(idx, 1, 1, KUNDEPROFILER[0][0], play, scene, month, day)],
+        )
+        for j, seat in enumerate(seats_string):
+            if seat != "1":
+                continue
+            self.insert_rows("Billett", [(idx, *chairs[j], play, "Ordinær")])
 
     def clear_database(self) -> None:
         """Sletter databasen og kobler til på nytt."""
