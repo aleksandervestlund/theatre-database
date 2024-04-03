@@ -91,7 +91,6 @@ class DBTicketOrderer(DBConnector):
         print("Hva er din adresse?")
         address = input("[SVAR]: ")
         self.insert_rows("Kundeprofil", [(phone, address, name)])
-
         return name
 
     def get_play(self) -> str:
@@ -103,7 +102,6 @@ class DBTicketOrderer(DBConnector):
                 "SELECT Navn FROM Teaterstykke"
             ).fetchall()
         ]
-
         return validate_input(plays)
 
     def get_stage(self, play: str) -> str:
@@ -139,7 +137,6 @@ class DBTicketOrderer(DBConnector):
         day, month = [
             int(number) for number in validate_input(dates).split("/")
         ]
-
         return day, month
 
     def get_group(self, play: str) -> list[str]:
@@ -151,7 +148,6 @@ class DBTicketOrderer(DBConnector):
                 (play,),
             ).fetchall()
         ]
-
         groups = []
         while True:
             print("Hva slags billetter ønsker du?")
@@ -263,7 +259,6 @@ class DBTicketOrderer(DBConnector):
             "Billettkjøp",
             [(ticket_id, TODAY_MONTH, TODAY_DAY, phone, play, stage, month, day)],
         )
-        
         self.insert_rows(
             "Billett",
             [(ticket_id, stage, seat, row, area, play, group) for seat, group in zip(seat_numbers, groups)],
