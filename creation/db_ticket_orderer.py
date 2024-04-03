@@ -152,7 +152,7 @@ class DBTicketOrderer(DBConnector):
         while True:
             print("Hva slags billetter ønsker du?")
             group = validate_input(all_groups)
-            
+
             print("Hvor mange billetter ønsker du?")
             while not (amount := input("[SVAR]: ")).isdigit():
                 print("Ugyldig antall. Prøv igjen.")
@@ -162,6 +162,7 @@ class DBTicketOrderer(DBConnector):
             print("Ønsker du fler?")
             if validate_input(["j", "n"]) == "n":
                 break
+
         return groups
 
     def get_fitting_seats(
@@ -279,6 +280,7 @@ class DBTicketOrderer(DBConnector):
             """,
             (ticket_id,),
         ).fetchall()
+
         return sum(
             count * (price1 if count < 10 else price10)
             for count, price1, price10 in prices
