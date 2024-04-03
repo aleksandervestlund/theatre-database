@@ -107,7 +107,7 @@ class DBCreator(DBConnector):
         self.insert_rows("Gruppe", GRUPPER)
 
     def read_from_file(
-        self, idx: int, info: tuple[str, str, list[tuple[str, int, int, str]]]
+        self, ticket_id: int, info: tuple[str, str, list[tuple[str, int, int, str]]]
     ) -> None:
         play, filename, chairs = info
         scene = " ".join(filename.split(os.sep)[-1].split("-")).title()
@@ -124,12 +124,12 @@ class DBCreator(DBConnector):
 
         self.insert_rows(
             "Billettkjøp",
-            [(idx, 1, 1, KUNDEPROFILER[0][0], play, scene, month, day)],
+            [(ticket_id, 1, 1, KUNDEPROFILER[0][0], play, scene, month, day)],
         )
         for j, seat in enumerate(seats_string):
             if seat != "1":
                 continue
-            self.insert_rows("Billett", [(idx, *chairs[j], play, "Ordinær")])
+            self.insert_rows("Billett", [(ticket_id, *chairs[j], play, "Ordinær")])
 
     def book_reserved_seats(self) -> None:
         """Leser filene i `reservations`. Lager et billettkjøp og
