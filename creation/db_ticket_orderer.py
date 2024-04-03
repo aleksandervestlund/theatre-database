@@ -103,7 +103,6 @@ class DBTicketOrderer(DBConnector):
                 "SELECT Navn FROM Teaterstykke"
             ).fetchall()
         ]
-
         return validate_input(plays)
 
     def get_stage(self, play: str) -> str:
