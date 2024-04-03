@@ -87,6 +87,7 @@ class DBTicketOrderer(DBConnector):
         """Lager en ny kundeprofil."""
         print("Hva er ditt navn?")
         name = input("[SVAR]: ")
+
         print("Hva er din adresse?")
         address = input("[SVAR]: ")
         self.insert_rows("Kundeprofil", [(phone, address, name)])
@@ -151,6 +152,7 @@ class DBTicketOrderer(DBConnector):
         while True:
             print("Hva slags billetter ønsker du?")
             group = validate_input(all_groups)
+            
             print("Hvor mange billetter ønsker du?")
             while not (amount := input("[SVAR]: ")).isdigit():
                 print("Ugyldig antall. Prøv igjen.")
