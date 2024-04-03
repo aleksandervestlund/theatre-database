@@ -263,6 +263,7 @@ class DBTicketOrderer(DBConnector):
             "Billettkjøp",
             [(ticket_id, TODAY_MONTH, TODAY_DAY, phone, play, stage, month, day)],
         )
+        
         self.insert_rows(
             "Billett",
             [(ticket_id, stage, seat, row, area, play, group) for seat, group in zip(seat_numbers, groups)],
