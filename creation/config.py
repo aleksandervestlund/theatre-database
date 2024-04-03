@@ -2,6 +2,7 @@ import os
 import random
 from pathlib import Path
 
+
 # For å kunne kjøre filer uavhengig av hvor de ligger hos brukeren
 root = Path(__file__).parent.parent.resolve()
 DB_FILE = os.path.join(root, "teater.db")
