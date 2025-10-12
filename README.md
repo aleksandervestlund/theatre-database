@@ -213,3 +213,5 @@ ORDER BY S2.Navn ASC, DI1.TeaterstykkeNavn ASC;
 - `Skuespillere i samme akt`.
 
   <img src="img/7_samme_akt.png" width="500px"/>
+#   D a t a b a s e - t e a t e r - p r o s j e k t  
+ 
